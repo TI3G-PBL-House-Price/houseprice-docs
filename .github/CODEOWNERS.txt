@@ -1,0 +1,34 @@
+# ==============================================================================
+# HousePrice Organization - Global Code Ownership & Review Rules
+# Format: path/ @github_username
+# ==============================================================================
+
+# Aturan Default (Fallback: Project Manager & QA Lead meninjau perubahan global)
+* @abdulrahmanhanif @nurfinkalailasari
+
+# 1. Konfigurasi GitHub & CI/CD Pipelines
+/.github/workflows/         @abdulrahmanhanif
+/.github/CODEOWNERS         @abdulrahmanhanif
+/.github/pull_request_template.md @abdulrahmanhanif @nurfinkalailasari
+
+# 2. Dokumentasi Teknis & Manajemen Tugas
+/docs/                      @abdulrahmanhanif @nurfinkalailasari
+/tasks/                     @abdulrahmanhanif
+
+# 3. Domain Repositori Mobile (houseprice-mobile-app)
+/lib/presentation/theme/    @jasminenasywa
+/lib/presentation/screens/home/     @jasminenasywa
+/lib/presentation/screens/predict/  @abdulrahmanhanif
+/lib/presentation/screens/result/   @nurfinkalailasari
+/lib/business_logic/        @naufalabid
+/lib/data/network/          @nurilhuda
+/lib/data/local/            @nurfinkalailasari
+/test/                      @jasminenasywa @naufalabid @nurfinkalailasari
+
+# 4. Domain Repositori ML & Backend (houseprice-backend-ml & ml-model-testing)
+/notebooks/                 @nurilhuda @naufalabid @nurfinkalailasari @jasminenasywa @abdulrahmanhanif
+/app/ml/                    @nurilhuda @naufalabid
+/app/api/                   @abdulrahmanhanif @nurilhuda
+/app/admin/                 @abdulrahmanhanif
+/migrations/                @abdulrahmanhanif
+/tests/                     @abdulrahmanhanif @nurfinkalailasari

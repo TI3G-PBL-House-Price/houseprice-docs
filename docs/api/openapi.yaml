@@ -1,0 +1,381 @@
+openapi: 3.0.3
+info:
+  title: HousePrice RESTful API Specification
+  description: >
+    Spesifikasi antarmuka pemrograman aplikasi (API) untuk sistem prediksi harga rumah DKI Jakarta berbasis Machine Learning.
+    Mencakup endpoint inferensi publik untuk aplikasi klien mobile (Flutter), endpoint agregasi data statistik pasar,
+    serta rute administratif untuk pemantauan dan pengelolaan model.
+  version: 1.0.0
+  contact:
+    name: Abdul Rahman Hanif Darmawan (Project Manager & QA)
+    email: hanif@houseprice.id
+
+servers:
+  - url: https://api.houseprice.id/api/v1
+    description: Production Server (Coolify Cloud Deployment)
+  - url: http://localhost:5000/api/v1
+    description: Local Development & Staging Server
+
+tags:
+  - name: Public Inference & Property Data
+    description: Endpoint yang dikonsumsi oleh aplikasi mobile Flutter tanpa autentikasi
+  - name: Administrative & Model Operations
+    description: Endpoint terproteksi untuk operasi manajemen dataset dan retraining model
+
+paths:
+  /predict:
+    post:
+      tags:
+        - Public Inference & Property Data
+      summary: Eksekusi inferensi estimasi nilai pasar properti
+      description: >
+        Menerima parameter fisik dan wilayah properti, melakukan validasi skema masukan,
+        menjalankan estimasi melalui model Random Forest aktif (.pkl), mencatat telemetri ke tabel prediction_logs,
+        serta mengembalikan nominal taksiran harga beserta rentang batas wajarnya.
+      operationId: predictHousePrice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PredictionRequest'
+      responses:
+        '200':
+          description: Inferensi berhasil dieksekusi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PredictionResponse'
+        '400':
+          description: Masukan data tidak valid (skema JSON salah atau nilai batas terlanggar)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Kegagalan internal server atau berkas model tidak dapat dimuat
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /market-statistics:
+    get:
+      tags:
+        - Public Inference & Property Data
+      summary: Mengambil data agregasi statistik pasar properti
+      description: >
+        Menyajikan nilai rata-rata harga pasar, rata-rata harga per meter persegi,
+        serta rata-rata luas tanah dan bangunan untuk kebutuhan halaman Beranda Mobile.
+      operationId: getMarketStatistics
+      parameters:
+        - name: city
+          in: query
+          required: false
+          description: Nama kota administrasi di DKI Jakarta untuk pemfilteran wilayah
+          schema:
+            type: string
+            example: Jakarta Barat
+        - name: district
+          in: query
+          required: false
+          description: Nama kecamatan atau kawasan spesifik
+          schema:
+            type: string
+            example: Citra Garden
+      responses:
+        '200':
+          description: Data agregasi pasar berhasil diperoleh
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketStatisticsResponse'
+        '500':
+          description: Terjadi kesalahan pembacaan basis data PostgreSQL
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /locations:
+    get:
+      tags:
+        - Public Inference & Property Data
+      summary: Mengambil daftar master referensi kota dan kecamatan
+      description: >
+        Menyediakan daftar hierarki wilayah administratif yang sah di DKI Jakarta
+        untuk mengisi opsi dropdown pada form spesifikasi properti mobile.
+      operationId: getMasterLocations
+      responses:
+        '200':
+          description: Daftar wilayah administratif berhasil dimuat
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationsResponse'
+        '500':
+          description: Gagal memuat data master wilayah
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /admin/retrain:
+    post:
+      tags:
+        - Administrative & Model Operations
+      summary: Memicu proses retraining model Machine Learning
+      description: >
+        Menjalankan pipeline pembersihan data, penanganan outlier berbasis IQR,
+        dan pelatihan ulang algoritma Random Forest menggunakan dataset terbaru.
+      operationId: triggerModelRetrain
+      security:
+        - AdminBearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - dataset_id
+                - test_size
+              properties:
+                dataset_id:
+                  type: string
+                  format: uuid
+                  example: b1ffcd88-8d1c-4ef8-bb6d-7cc0ce491b22
+                test_size:
+                  type: number
+                  format: float
+                  minimum: 0.1
+                  maximum: 0.4
+                  default: 0.2
+                  example: 0.2
+      responses:
+        '202':
+          description: Pelatihan model berhasil dijadwalkan dan sedang berjalan di latar belakang
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrainResponse'
+        '401':
+          description: Akses ditolak (token otentikasi admin tidak valid atau kedaluwarsa)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    AdminBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Token otentikasi administratif berbasis JSON Web Token
+
+  schemas:
+    PredictionRequest:
+      type: object
+      required:
+        - city
+        - district
+        - surface_area
+        - building_area
+        - bed
+        - bath
+        - carport
+      properties:
+        city:
+          type: string
+          description: Nama kota administrasi di DKI Jakarta
+          example: Jakarta Barat
+        district:
+          type: string
+          description: Nama kecamatan atau kawasan perumahan terdaftar
+          example: Citra Garden
+        surface_area:
+          type: number
+          format: float
+          minimum: 1
+          description: Luas tanah properti dalam satuan meter persegi (m²)
+          example: 250.0
+        building_area:
+          type: number
+          format: float
+          minimum: 1
+          description: Luas fisik bangunan properti dalam satuan meter persegi (m²)
+          example: 350.0
+        bed:
+          type: integer
+          minimum: 0
+          description: Jumlah fasilitas kamar tidur
+          example: 2
+        bath:
+          type: integer
+          minimum: 0
+          description: Jumlah fasilitas kamar mandi
+          example: 4
+        carport:
+          type: integer
+          minimum: 0
+          description: Kapasitas ruang parkir kendaraan (tempat mobil)
+          example: 2
+
+    PredictionResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        data:
+          type: object
+          properties:
+            predicted_price:
+              type: number
+              format: double
+              description: Taksiran nilai pasar properti hasil komputasi model ML (Rupiah)
+              example: 5900000000.00
+            currency:
+              type: string
+              example: IDR
+            tolerance_range:
+              type: object
+              description: Rentang batas toleransi kewajaran harga (+/- 10%)
+              properties:
+                lower_bound:
+                  type: number
+                  format: double
+                  example: 5310000000.00
+                upper_bound:
+                  type: number
+                  format: double
+                  example: 6490000000.00
+            model_info:
+              type: object
+              properties:
+                version:
+                  type: string
+                  example: v1.0.0
+                algorithm:
+                  type: string
+                  example: Random Forest Regressor
+            performance:
+              type: object
+              properties:
+                latency_ms:
+                  type: integer
+                  description: Durasi waktu inferensi komputasi server dalam milidetik
+                  example: 118
+        message:
+          type: string
+          example: Estimasi harga properti berhasil dihitung
+
+    MarketStatisticsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              city:
+                type: string
+                example: Jakarta Barat
+              district:
+                type: string
+                nullable: true
+                example: Citra Garden
+              avg_price:
+                type: number
+                format: double
+                example: 2450000000.00
+              avg_price_per_sqm:
+                type: number
+                format: double
+                example: 18500000.00
+              avg_surface_area:
+                type: number
+                format: float
+                example: 125.50
+              avg_building_area:
+                type: number
+                format: float
+                example: 140.00
+              total_properties:
+                type: integer
+                example: 450
+        message:
+          type: string
+          example: Data statistik pasar berhasil dimuat
+
+    LocationsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              city:
+                type: string
+                example: Jakarta Barat
+              districts:
+                type: array
+                items:
+                  type: string
+                example:
+                  - Citra Garden
+                  - Jelambar
+                  - Tanjung Duren
+        message:
+          type: string
+          example: Master lokasi berhasil dimuat
+
+    RetrainResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        data:
+          type: object
+          properties:
+            task_id:
+              type: string
+              format: uuid
+              example: e4aaeb55-5f2b-4ef8-bb6d-0ff3fa724e55
+            status:
+              type: string
+              example: PROCESSING
+            target_algorithm:
+              type: string
+              example: Random Forest Regressor
+        message:
+          type: string
+          example: Proses pelatihan ulang model berhasil dipicu di latar belakang
+
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: error
+        error_code:
+          type: string
+          example: INVALID_INPUT_SCHEMA
+        message:
+          type: string
+          example: Nilai luas tanah (surface_area) harus bernilai minimal 1 m²
+        details:
+          type: array
+          items:
+            type: string
+          example:
+            - surface_area must be greater than or equal to 1.0

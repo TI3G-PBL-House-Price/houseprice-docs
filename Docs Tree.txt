@@ -1,0 +1,41 @@
+houseprice-project/
+├── README.md                      # Overview proyek, tim, quickstart, dan badge status
+├── AGENTS.md                      # Pedoman instruksi context untuk AI Coding Assistant
+├── PRD.md                         # Product Requirements Document lengkap (Core ML & Mobile)
+├── ENGINEERING.md                 # Standar coding, konvensi commit, linting, dan arsitektur
+├── CONTRIBUTING.md                # Panduan kolaborasi 5 anggota, workflow PR, dan branching
+├── SECURITY.md                    # Kebijakan penanganan kredensial, env variables, & CORS
+├── CHANGELOG.md                   # Riwayat perubahan per milestone PBL
+├── CODEOWNERS                     # Mapping kepemilikan kode per anggota tim (5 mahasiswa)
+│
+├── docs/
+│   ├── glossary.md                # Glosarium istilah properti, istilah ML, dan metrik
+│   ├── non-functional-requirements.md # Standar latensi (<1.5s), throughput, kompatibilitas Android
+│   ├── testing.md                 # Rencana uji PMPL: BVA, EP, Usability, STR, Postman API Test
+│   ├── observability.md           # Logging inferensi, metrik performa model, audit logging
+│   ├── privacy.md                 # Kebijakan data pengguna (lokal mobile storage vs cloud logs)
+│   ├── threat-model.md            # Analisis ancaman STRIDE pada API dan Web Admin
+│   ├── data-model.md              # Skema 7 tabel PostgreSQL, kamus data, dan indexing
+│   ├── architecture.md            # Diagram arsitektur C4, layer Flutter, Flask pipeline
+│   ├── api/
+│   │   └── openapi.yaml           # Spesifikasi OpenAPI 3.0 untuk seluruh endpoint API
+│   ├── decisions/
+│   │   ├── 0001-database-choice.md        # ADR: Pemilihan PostgreSQL untuk tabular & audit log
+│   │   └── 0002-authentication-strategy.md# ADR: Auth Admin Session/JWT vs Guest API Mobile
+│   └── operations/
+│       ├── runbook.md             # Panduan troubleshooting operasional dan emergency handling
+│       ├── deployment.md          # Panduan deployment Open Source (Coolify / Docker Compose)
+│       └── disaster-recovery.md   # Backup database PostgreSQL, rollback model .pkl
+│
+├── tasks/
+│   ├── backlog.md                 # Daftar backlog fitur per mata kuliah (Mobile, ML, PMPL)
+│   ├── current-sprint.md          # Sprint berjalan menuju Milestone 1 (Minggu 5 - 8)
+│   └── completed/
+│       └── sprint-0-proposal.md   # Rekap penyelesaian fase identifikasi & proposal
+│
+└── .github/
+    ├── workflows/
+    │   ├── mobile-ci.yml          # Flutter test & build check
+    │   └── backend-ci.yml         # Pytest, flake8 linting, & data integrity check
+    ├── pull_request_template.md   # Template PR wajib menyertakan bukti uji PMPL
+    └── CODEOWNERS                 # GitHub codeowners config
