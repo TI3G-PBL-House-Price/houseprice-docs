@@ -6,10 +6,10 @@ houseprice-project/
 ├── CONTRIBUTING.md                # Panduan kolaborasi 5 anggota, workflow PR, dan branching
 ├── SECURITY.md                    # Kebijakan penanganan kredensial, env variables, & CORS
 ├── CHANGELOG.md                   # Riwayat perubahan per milestone PBL
-├── CODEOWNERS                     # Mapping kepemilikan kode per anggota tim (5 mahasiswa)
 │
 ├── docs/
 │   ├── glossary.md                # Glosarium istilah properti, istilah ML, dan metrik
+│   ├── design-system.md               # Panduan token warna, tipografi, dan layout Flutter
 │   ├── non-functional-requirements.md # Standar latensi (<1.5s), throughput, kompatibilitas Android
 │   ├── testing.md                 # Rencana uji PMPL: BVA, EP, Usability, STR, Postman API Test
 │   ├── observability.md           # Logging inferensi, metrik performa model, audit logging
