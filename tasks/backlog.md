@@ -16,13 +16,13 @@ Setiap item backlog diklasifikasikan menggunakan metode prioritas **MoSCoW**:
 
 ## 2. Backlog Mata Kuliah Pemrograman Mobile (Flutter)
 
-Repositori: `houseprice-mobile-app` (Kondisi saat ini: Desain UI siap, menunggu inisialisasi kode & *slicing*)
+Repositori: `houseprice-mobile-app` (Kondisi saat ini: Inisialisasi arsitektur Clean Architecture dan *slicing* UI mockup selesai)
 
 | Kode Task | Modul / Fitur | Deskripsi Pekerjaan | Prioritas | Target Sprint | Penanggung Jawab | Status Riil |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **MOB-01** | Fondasi Arsitektur | Inisialisasi proyek Flutter (`flutter create`), konfigurasi tema global (`app_colors.dart`, `app_typography.dart`), dan scaffold navigasi 3 tab. | M | Sprint 1 | Jasmine | **To Do** |
-| **MOB-02** | Beranda (Fitur 1) | *Slicing* antarmuka Beranda dari desain UI: grafik rata-rata harga per wilayah dan kartu statistik pasar properti. | M | Sprint 1 | Jasmine | **To Do** |
-| **MOB-03** | Form Input (Fitur 2) | *Slicing* form 7 spesifikasi properti (luas tanah min. 30 m², bangunan, kamar, carport, wilayah) dan validasi masukan lokal. | M | Sprint 1 | Hanif | **To Do** |
+| **MOB-01** | Fondasi Arsitektur | Inisialisasi struktur Clean Architecture (`core/` & `features/`), konfigurasi tema global (`app_colors.dart`, `app_typography.dart`, `app_sizes.dart`), dan scaffold navigasi BottomNavigationBar. | M | Sprint 1 | Jasmine | **Done** |
+| **MOB-02** | Beranda (Fitur 1) | *Slicing* antarmuka Beranda dari desain UI: kartu statistik ringkasan pasar properti, tombol aksi cepat, dan daftar properti rekomendasi. | M | Sprint 1 | Jasmine | **Done** |
+| **MOB-03** | Form Input (Fitur 2) | *Slicing* form 7 spesifikasi properti (luas tanah min. 30 m², bangunan, kamar, carport, dropdown wilayah) dan validasi masukan lokal. | M | Sprint 1 | Hanif | **Done** |
 | **MOB-04** | Core Networking (Fitur 2) | Integrasi REST API Client dan State Management (Provider/BLoC) untuk menghubungkan form mobile ke backend inferensi cloud. | M | Sprint 2 | Nuril | To Do |
 | **MOB-05** | Layar Hasil (Fitur 2 & 3) | Pembuatan kartu visual penampil nominal estimasi harga, rentang toleransi pasar wajar, ringkasan spesifikasi, dan tombol simpan riwayat. | M | Sprint 2 | Nurfinka | To Do |
 | **MOB-06** | Cek Kewajaran (Fitur 3) | Implementasi komponen input harga penawaran penjual di dalam Layar Hasil dan logika evaluasi status (*Murah, Wajar, Mahal* deviasi $\pm 10\%$). | M | Sprint 2 | Naufal | To Do |

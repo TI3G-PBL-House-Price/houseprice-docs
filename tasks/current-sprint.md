@@ -13,8 +13,8 @@ Dokumen ini memuat fokus kerja, papan aktivitas kanban, target capaian, serta pe
   * Status: **Belum Diinisialisasi (Kosong)**.
   * Rencana: Kode backend Flask, struktur Blueprints, migrasi PostgreSQL, dan layanan inferensi akan dibangun ulang setelah model terbaik di repositori `ml-model-testing` terpilih secara definitif[cite: 1, 23, 27].
 * **Repositori `houseprice-mobile-app`:**
-  * Status: **Persiapan Slicing UI**.
-  * Progres: Desain antarmuka (UI Mockup / Figma) telah tersedia, namun inisialisasi repositori proyek Flutter dan proses konversi desain ke kode (*slicing UI*) belum dimulai[cite: 31].
+  * Status: **Selesai Inisialisasi & Slicing UI Fondasi**.
+  * Progres: Inisialisasi arsitektur Clean Architecture (`core/` & `features/`), tema global dan token warna/tipografi, serta *slicing* antarmuka utama (Beranda, Form Spesifikasi Properti, Hasil Estimasi, Riwayat, Favorit, Pengaturan) telah berhasil diimplementasikan dengan mock data dan validasi lokal[cite: 24, 25, 31].
 
 ---
 
@@ -34,12 +34,12 @@ Sprint 1 difokuskan untuk menyelesaikan fondasi pada ketiga repositori sebelum m
 +-----------------------------------------------------------------------------------+
 | BACKLOG / TO DO           | IN PROGRESS                 | DONE                    |
 +-----------------------------------------------------------------------------------+
-| [MOB] Init Flutter Repo   | [ML] Eksperimen Model       | [DOC] Proposal Disetujui|
-| [MOB] Slicing UI Beranda  |      (Random Forest vs      | [DOC] Dokumen Root Selesai|
-| [MOB] Slicing Form Input  |       Baseline & Boosting)  | [DES] UI Design Mockup  |
-| [BE]  Init Repo Flask     | [QA] Penyusunan Skenario    |                          |
-| [BE]  Setup Docker & DB   |      Test Case BVA / EP     |                          |
-| [ML]  Export Model .pkl   |                             |                          |
+| [BE]  Init Repo Flask     | [ML] Eksperimen Model       | [DOC] Proposal Disetujui|
+| [BE]  Setup Docker & DB   |      (Random Forest vs      | [DOC] Dokumen Root Selesai|
+| [ML]  Export Model .pkl   |       Baseline & Boosting)  | [DES] UI Design Mockup  |
+|                           | [QA] Penyusunan Skenario    | [MOB] Init Flutter Repo |
+|                           |      Test Case BVA / EP     | [MOB] Slicing UI Beranda|
+|                           |                             | [MOB] Slicing Form Input|
 +-----------------------------------------------------------------------------------+
 ```
 

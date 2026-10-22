@@ -6,6 +6,17 @@ Seluruh pembaruan penting pada proyek HousePrice dicatat dalam berkas ini. Forma
 
 ## [Unreleased]
 
+### Ditambahkan (Added - Mobile App Sprint 1)
+- **Struktur Fondasi Clean Architecture:**
+  - Setup folder arsitektur `lib/core/` (constants: `app_colors.dart`, `app_sizes.dart`, `app_typography.dart`; theme: `app_theme.dart`) dan `lib/features/` berorientasi fitur presentation (`pages/` dan `widgets/`).
+  - Implementasi scaffold navigasi `MainNavigationWrapper` menggunakan Material 3 `NavigationBar` (Beranda, Prediksi, Riwayat, Favorit, Pengaturan).
+- **Slicing Antarmuka & Validasi UI (UI Mockup):**
+  - **Beranda (Home):** Header salam dinamis, kartu ringkasan pasar properti DKI Jakarta, tombol aksi cepat (Mulai Prediksi, Simulasi KPR, Cek Kewajaran, Riwayat), dan kartu rekomendasi properti.
+  - **Form Prediksi Properti:** Form 7 parameter spesifikasi rumah lengkap dengan validasi lokal (luas tanah min. 30 m², luas bangunan, kamar tidur, kamar mandi, carport, dropdown wilayah kota administratif & kecamatan).
+  - **Hasil Estimasi Properti:** Kartu nominal estimasi harga (Rp), rentang pasar wajar toleransi $\pm 10\%$, ringkasan spesifikasi, input evaluasi kewajaran harga penawaran penjual, dan tombol aksi simpan/bagikan.
+  - **Riwayat & Favorit:** Antarmuka daftar riwayat kalkulasi estimasi offline dan daftar properti tersimpan dengan kartu informasi interaktif.
+  - **Pengaturan:** Halaman konfigurasi profil, preferensi notifikasi, mode gelap/terang, dan informasi pengembang PBL.
+
 ### Sedang Dikerjakan (In Progress - Target Milestone 1 / Minggu 8)
 - **Machine Learning & Data Pipeline:**
   - Analisis data eksploratif (EDA) dan visualisasi korelasi fitur pada dataset `jakarta_house.csv`.
@@ -15,9 +26,7 @@ Seluruh pembaruan penting pada proyek HousePrice dicatat dalam berkas ini. Forma
   - Penskalaan fitur, One-Hot Encoding wilayah, dan pembagian dataset train-test (80:20).
   - Pelatihan model regresi dasar dan algoritma ensemble (Random Forest Regressor) hingga ekspor file serialisasi `.pkl`.
 - **Aplikasi Mobile (Flutter):**
-  - Implementasi UI Design System dasar dan navigasi aplikasi.
-  - Tampilan Beranda (Home) ringkasan data pasar properti Jakarta.
-  - Form input spesifikasi properti lengkap dengan validasi lokal (pencegahan input angka minus, nol, atau teks).
+  - Integrasi arsitektur State Management (Provider/BLoC) dan REST API client untuk menghubungkan form input ke backend ML di Sprint 2.
 - **Backend & RESTful API (Flask):**
   - Endpoint `POST /api/v1/predict` untuk inferensi estimasi harga rumah.
   - Endpoint `GET /api/v1/market-statistics` untuk penyediaan agregasi data ke mobile.
