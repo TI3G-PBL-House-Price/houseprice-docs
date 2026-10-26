@@ -3,11 +3,11 @@ info:
   title: HousePrice RESTful API Specification
   description: >
     Spesifikasi antarmuka pemrograman aplikasi (API) untuk sistem prediksi harga rumah DKI Jakarta berbasis Machine Learning.
-    Mencakup endpoint inferensi publik untuk aplikasi klien mobile (Flutter), endpoint agregasi data statistik pasar,
-    serta rute administratif untuk pemantauan dan pengelolaan model.
-  version: 1.0.0
+    Menerapkan arsitektur Strict Gate Authentication berbasis JSON Web Token (JWT) untuk aplikasi klien mobile (Flutter),
+    layanan notifikasi in-app, agregasi statistik pasar, serta rute administratif dashboard web pengelola model.
+  version: 1.1.0
   contact:
-    name: Abdul Rahman Hanif Darmawan (Project Manager & QA)
+    name: Abdul Rahman Hanif Darmawan (PM & QA Integration)
     email: hanif@houseprice.id
 
 servers:
@@ -17,22 +17,217 @@ servers:
     description: Local Development & Staging Server
 
 tags:
-  - name: Public Inference & Property Data
-    description: Endpoint yang dikonsumsi oleh aplikasi mobile Flutter tanpa autentikasi
+  - name: Authentication & User Profile
+    description: Endpoint otentikasi Strict Gate, pendaftaran akun mobile, manajemen sesi JWT, dan profil pengguna
+  - name: Property Prediction & Intelligence
+    description: Endpoint komputasi inferensi model Machine Learning regresi harga rumah dan riwayat prediksi cloud
+  - name: Market Statistics & Master Data
+    description: Endpoint agregasi statistik tren pasar dan data referensi wilayah DKI Jakarta
+  - name: In-App Notifications
+    description: Endpoint pengelolaan pesan notifikasi tren harga dan pembaruan sistem per pengguna
   - name: Administrative & Model Operations
-    description: Endpoint terproteksi untuk operasi manajemen dataset dan retraining model
+    description: Endpoint terproteksi khusus administrator untuk manajemen dataset dan retraining model ML
 
 paths:
+  # ============================================================================
+  # AUTHENTICATION & USER PROFILE
+  # ============================================================================
+  /auth/register:
+    post:
+      tags:
+        - Authentication & User Profile
+      summary: Registrasi akun mobile pengguna baru
+      description: >
+        Mendaftarkan akun mobile baru ke tabel users dengan enkripsi kata sandi
+        menggunakan algoritma Bcrypt (cost factor minimal 12).
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Akun pengguna berhasil didaftarkan
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthSuccessResponse'
+        '400':
+          description: Validasi masukan gagal (format email salah atau konfirmasi password tidak cocok)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Alamat email sudah terdaftar sebelumnya
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/login:
+    post:
+      tags:
+        - Authentication & User Profile
+      summary: Otentikasi masuk pengguna mobile (Strict Gate)
+      description: >
+        Memverifikasi kredensial email dan kata sandi pengguna mobile, lalu menerbitkan
+        JWT Access Token (algoritma HS256) untuk otorisasi endpoint privat.
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Otentikasi berhasil, token JWT diterbitkan
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Kredensial tidak valid (email atau kata sandi salah)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/me:
+    get:
+      tags:
+        - Authentication & User Profile
+      summary: Mengambil profil data pengguna yang sedang login
+      description: >
+        Mengembalikan informasi profil identitas pengguna aktif berdasarkan
+        verifikasi Bearer Token JWT pada request header.
+      operationId: getCurrentUserProfile
+      security:
+        - UserBearerAuth: []
+      responses:
+        '200':
+          description: Data profil berhasil diambil
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileResponse'
+        '401':
+          description: Token otentikasi tidak valid atau sudah kedaluwarsa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/profile:
+    put:
+      tags:
+        - Authentication & User Profile
+      summary: Memperbarui profil atau mengganti kata sandi
+      description: >
+        Mengubah informasi nama lengkap, nomor kontak, atau memperbarui kata sandi akun pengguna.
+      operationId: updateUserProfile
+      security:
+        - UserBearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProfileRequest'
+      responses:
+        '200':
+          description: Profil berhasil diperbarui
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileResponse'
+        '400':
+          description: Kata sandi lama tidak sesuai atau format data salah
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Sesi otentikasi tidak valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/fcm-token:
+    post:
+      tags:
+        - Authentication & User Profile
+      summary: Sinkronisasi token perangkat FCM (Push Notification)
+      description: >
+        Menyimpan token Firebase Cloud Messaging milik perangkat pengguna ke basis data
+        untuk kebutuhan pengiriman push notification.
+      operationId: updateFcmToken
+      security:
+        - UserBearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FcmTokenRequest'
+      responses:
+        '200':
+          description: Token FCM berhasil disinkronkan
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseSuccessResponse'
+        '401':
+          description: Akses tidak terotentikasi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/logout:
+    post:
+      tags:
+        - Authentication & User Profile
+      summary: Keluar dari sesi aplikasi mobile
+      description: >
+        Menghapus sesi aktif pengguna pada level aplikasi dan mencabut token otentikasi.
+      operationId: logoutUser
+      security:
+        - UserBearerAuth: []
+      responses:
+        '200':
+          description: Berhasil logout dari sistem
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseSuccessResponse'
+        '401':
+          description: Token tidak valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # ============================================================================
+  # PROPERTY PREDICTION & INTELLIGENCE
+  # ============================================================================
   /predict:
     post:
       tags:
-        - Public Inference & Property Data
-      summary: Eksekusi inferensi estimasi nilai pasar properti
+        - Property Prediction & Intelligence
+      summary: Eksekusi inferensi estimasi harga rumah (Strict Gate Protected)
       description: >
-        Menerima parameter fisik dan wilayah properti, melakukan validasi skema masukan,
-        menjalankan estimasi melalui model Random Forest aktif (.pkl), mencatat telemetri ke tabel prediction_logs,
-        serta mengembalikan nominal taksiran harga beserta rentang batas wajarnya.
+        Menerima parameter fisik properti, mengekstrak user_id dari JWT token,
+        melakukan validasi skema masukan, mengeksekusi inferensi model Random Forest (.pkl),
+        mencatat hasil komputasi ke tabel prediction_logs yang terikat ke user,
+        dan mengembalikan taksiran harga pasar beserta rentang batas wajarnya.
       operationId: predictHousePrice
+      security:
+        - UserBearerAuth: []
       requestBody:
         required: true
         content:
@@ -47,32 +242,81 @@ paths:
               schema:
                 $ref: '#/components/schemas/PredictionResponse'
         '400':
-          description: Masukan data tidak valid (skema JSON salah atau nilai batas terlanggar)
+          description: Masukan data tidak valid (skema JSON salah atau batas nilai terlanggar)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Akses ditolak (wajib login terlebih dahulu)
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '500':
-          description: Kegagalan internal server atau berkas model tidak dapat dimuat
+          description: Kesalahan internal server atau berkas model tidak dapat dimuat
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
+  /predict/history:
+    get:
+      tags:
+        - Property Prediction & Intelligence
+      summary: Mengambil riwayat kalkulasi prediksi pengguna aktif
+      description: >
+        Menampilkan daftar riwayat transaksi inferensi properti yang pernah dilakukan oleh akun pengguna
+        yang sedang login (diambil dari tabel prediction_logs berbasis user_id).
+      operationId: getUserPredictionHistory
+      security:
+        - UserBearerAuth: []
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          description: Batasan jumlah data riwayat yang ditampilkan
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          required: false
+          description: Nilai pergeseran halaman data riwayat
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Riwayat prediksi berhasil diambil
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PredictionHistoryResponse'
+        '401':
+          description: Sesi tidak valid atau belum login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # ============================================================================
+  # MARKET STATISTICS & MASTER DATA
+  # ============================================================================
   /market-statistics:
     get:
       tags:
-        - Public Inference & Property Data
+        - Market Statistics & Master Data
       summary: Mengambil data agregasi statistik pasar properti
       description: >
-        Menyajikan nilai rata-rata harga pasar, rata-rata harga per meter persegi,
-        serta rata-rata luas tanah dan bangunan untuk kebutuhan halaman Beranda Mobile.
+        Menyajikan nilai rata-rata harga pasar properti, rata-rata harga per meter persegi,
+        serta rata-rata luas tanah dan bangunan untuk kebutuhan visualisasi Beranda Mobile.
       operationId: getMarketStatistics
       parameters:
         - name: city
           in: query
           required: false
-          description: Nama kota administrasi di DKI Jakarta untuk pemfilteran wilayah
+          description: Nama kota administrasi di DKI Jakarta untuk pemfilteran
           schema:
             type: string
             example: Jakarta Barat
@@ -85,7 +329,7 @@ paths:
             example: Citra Garden
       responses:
         '200':
-          description: Data agregasi pasar berhasil diperoleh
+          description: Data agregasi statistik pasar berhasil diperoleh
           content:
             application/json:
               schema:
@@ -100,11 +344,11 @@ paths:
   /locations:
     get:
       tags:
-        - Public Inference & Property Data
+        - Market Statistics & Master Data
       summary: Mengambil daftar master referensi kota dan kecamatan
       description: >
-        Menyediakan daftar hierarki wilayah administratif yang sah di DKI Jakarta
-        untuk mengisi opsi dropdown pada form spesifikasi properti mobile.
+        Menyediakan hierarki wilayah administratif DKI Jakarta yang terdaftar
+        untuk mengisi opsi dropdown form spesifikasi properti mobile.
       operationId: getMasterLocations
       responses:
         '200':
@@ -120,6 +364,76 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
+  # ============================================================================
+  # IN-APP NOTIFICATIONS
+  # ============================================================================
+  /notifications:
+    get:
+      tags:
+        - In-App Notifications
+      summary: Mengambil daftar notifikasi milik pengguna aktif
+      description: >
+        Menampilkan daftar pesan pemberitahuan tren harga properti, rilis model ML baru,
+        dan pengumuman sistem yang ditujukan kepada akun pengguna terkait.
+      operationId: getUserNotifications
+      security:
+        - UserBearerAuth: []
+      responses:
+        '200':
+          description: Daftar notifikasi berhasil dimuat
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationsListResponse'
+        '401':
+          description: Akses tidak terotentikasi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /notifications/{id}/read:
+    patch:
+      tags:
+        - In-App Notifications
+      summary: Menandai notifikasi telah dibaca
+      description: >
+        Memperbarui atribut is_read menjadi TRUE pada pesan notifikasi terpilih.
+      operationId: markNotificationAsRead
+      security:
+        - UserBearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: UUID identitas unik notifikasi
+          schema:
+            type: string
+            format: uuid
+            example: a2ccdb33-5e2c-4ef8-bb6d-0bb2ce732b12
+      responses:
+        '200':
+          description: Status notifikasi berhasil diperbarui
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseSuccessResponse'
+        '401':
+          description: Token otentikasi tidak valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Notifikasi tidak ditemukan atau bukan milik pengguna aktif
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # ============================================================================
+  # ADMINISTRATIVE & MODEL OPERATIONS
+  # ============================================================================
   /admin/retrain:
     post:
       tags:
@@ -166,15 +480,192 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
+# ==============================================================================
+# COMPONENTS (SECURITY & SCHEMAS)
+# ==============================================================================
 components:
   securitySchemes:
+    UserBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Token otentikasi pengguna mobile berbasis JSON Web Token (HS256)
     AdminBearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
-      description: Token otentikasi administratif berbasis JSON Web Token
+      description: Token otentikasi administratif dashboard web berbasis JSON Web Token
 
   schemas:
+    # ---------------- Auth Schemas ----------------
+    RegisterRequest:
+      type: object
+      required:
+        - full_name
+        - email
+        - password
+        - confirm_password
+      properties:
+        full_name:
+          type: string
+          example: Budi Santoso
+        email:
+          type: string
+          format: email
+          example: budi.santoso@gmail.com
+        password:
+          type: string
+          format: password
+          minLength: 8
+          example: Password123!
+        confirm_password:
+          type: string
+          format: password
+          minLength: 8
+          example: Password123!
+        phone_number:
+          type: string
+          nullable: true
+          example: "081234567890"
+
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: budi.santoso@gmail.com
+        password:
+          type: string
+          format: password
+          example: Password123!
+
+    UpdateProfileRequest:
+      type: object
+      properties:
+        full_name:
+          type: string
+          example: Budi Santoso
+        phone_number:
+          type: string
+          example: "081234567890"
+        current_password:
+          type: string
+          format: password
+          example: Password123!
+        new_password:
+          type: string
+          format: password
+          minLength: 8
+          example: NewPassword456!
+
+    FcmTokenRequest:
+      type: object
+      required:
+        - fcm_token
+      properties:
+        fcm_token:
+          type: string
+          example: fM7sK_d92...
+
+    AuthSuccessResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: f1bbcd22-4e1b-4df8-bb6d-9aa1cd621a01
+            full_name:
+              type: string
+              example: Budi Santoso
+            email:
+              type: string
+              example: budi.santoso@gmail.com
+            created_at:
+              type: string
+              format: date-time
+              example: "2026-10-26T10:00:00Z"
+        message:
+          type: string
+          example: Akun pengguna berhasil didaftarkan
+
+    LoginResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        data:
+          type: object
+          properties:
+            access_token:
+              type: string
+              example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+            token_type:
+              type: string
+              example: Bearer
+            expires_in:
+              type: integer
+              description: Masa berlaku token dalam satuan detik (misal 7 hari = 604800)
+              example: 604800
+            user:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  example: f1bbcd22-4e1b-4df8-bb6d-9aa1cd621a01
+                full_name:
+                  type: string
+                  example: Budi Santoso
+                email:
+                  type: string
+                  example: budi.santoso@gmail.com
+        message:
+          type: string
+          example: Login berhasil
+
+    UserProfileResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: f1bbcd22-4e1b-4df8-bb6d-9aa1cd621a01
+            full_name:
+              type: string
+              example: Budi Santoso
+            email:
+              type: string
+              example: budi.santoso@gmail.com
+            phone_number:
+              type: string
+              nullable: true
+              example: "081234567890"
+            created_at:
+              type: string
+              format: date-time
+              example: "2026-10-26T10:00:00Z"
+        message:
+          type: string
+          example: Profil pengguna berhasil dimuat
+
+    # ---------------- Prediction Schemas ----------------
     PredictionRequest:
       type: object
       required:
@@ -231,6 +722,10 @@ components:
         data:
           type: object
           properties:
+            prediction_id:
+              type: string
+              format: uuid
+              example: d3ffea66-6f3a-4ef8-bb6d-9ee2ea613d44
             predicted_price:
               type: number
               format: double
@@ -271,6 +766,87 @@ components:
           type: string
           example: Estimasi harga properti berhasil dihitung
 
+    PredictionHistoryResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                example: d3ffea66-6f3a-4ef8-bb6d-9ee2ea613d44
+              city:
+                type: string
+                example: Jakarta Barat
+              district:
+                type: string
+                example: Citra Garden
+              surface_area:
+                type: number
+                example: 100.0
+              building_area:
+                type: number
+                example: 85.0
+              predicted_price:
+                type: number
+                example: 1850000000.00
+              created_at:
+                type: string
+                format: date-time
+                example: "2026-10-26T14:15:00Z"
+        message:
+          type: string
+          example: Riwayat prediksi berhasil diambil
+
+    # ---------------- Notifications Schemas ----------------
+    NotificationsListResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        data:
+          type: object
+          properties:
+            unread_count:
+              type: integer
+              example: 2
+            items:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    example: a2ccdb33-5e2c-4ef8-bb6d-0bb2ce732b12
+                  title:
+                    type: string
+                    example: Tren Harga Properti Jakarta Barat Naik
+                  message:
+                    type: string
+                    example: Rata-rata harga properti di wilayah Cengkareng mengalami kenaikan 3.2% bulan ini.
+                  type:
+                    type: string
+                    example: MARKET_TREND
+                  is_read:
+                    type: boolean
+                    example: false
+                  created_at:
+                    type: string
+                    format: date-time
+                    example: "2026-10-26T11:30:00Z"
+        message:
+          type: string
+          example: Daftar notifikasi berhasil dimuat
+
+    # ---------------- Market & Locations Schemas ----------------
     MarketStatisticsResponse:
       type: object
       properties:
@@ -338,6 +914,7 @@ components:
           type: string
           example: Master lokasi berhasil dimuat
 
+    # ---------------- Administrative Schemas ----------------
     RetrainResponse:
       type: object
       properties:
@@ -360,6 +937,17 @@ components:
         message:
           type: string
           example: Proses pelatihan ulang model berhasil dipicu di latar belakang
+
+    # ---------------- Shared Responses ----------------
+    BaseSuccessResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: Operasi berhasil dieksekusi
 
     ErrorResponse:
       type: object

@@ -1,89 +1,111 @@
 # Rencana Kerja Sprint Aktif (Current Sprint) - HousePrice
 
-Dokumen ini memuat fokus kerja, papan aktivitas kanban, target capaian, serta pembagian tugas harian seluruh anggota tim untuk siklus **Sprint 1 (Minggu 5 s/d 8)** menuju demonstrasi **Milestone 1: Progres Tengah Semester**[cite: 8, 28].
+Dokumen ini memuat fokus kerja, papan aktivitas kanban, target capaian, serta pembagian tugas harian seluruh anggota tim untuk siklus **Sprint 1 (Minggu 5 s/d 8)** menuju demonstrasi **Milestone 1: Progres Tengah Semester** pasca penyesuaian kebutuhan *Strict Gate Authentication* dan penambahan modul antarmuka baru[cite: 8, 9].
 
 ---
 
 ## 1. Status & Realitas Repositori Terkini (Baseline Kondisi Riil)
 
 * **Repositori `ml-model-testing` (Fokus Utama ML Saat Ini):**
-  * Status: **Aktif (Fase Eksperimen)**[cite: 33].
-  * Progres: Pengujian eksplorasi algoritma sedang berjalan[cite: 27, 33]. Model *Random Forest Regressor* telah diuji coba[cite: 27, 33]. Algoritma pembanding lain (seperti *Multiple Linear Regression* sebagai baseline dan *Gradient Boosting / XGBoost*) sedang disiapkan untuk diuji pada dataset `jakarta_house.csv` sebelum menetapkan model final[cite: 27, 33].
+  * Status: **Aktif (Fase Eksperimen)**[cite: 9].
+  * Progres: Pengujian eksplorasi algoritma sedang berjalan[cite: 9]. Model *Random Forest Regressor* telah diuji coba[cite: 9]. Algoritma pembanding lain (seperti *Multiple Linear Regression* sebagai baseline dan *Gradient Boosting / XGBoost*) sedang disiapkan untuk diuji pada dataset `jakarta_house.csv` sebelum menetapkan model final[cite: 9].
 * **Repositori `houseprice-backend-ml`:**
-  * Status: **Belum Diinisialisasi (Kosong)**.
-  * Rencana: Kode backend Flask, struktur Blueprints, migrasi PostgreSQL, dan layanan inferensi akan dibangun ulang setelah model terbaik di repositori `ml-model-testing` terpilih secara definitif[cite: 1, 23, 27].
+  * Status: **Belum Diinisialisasi (Kosong)**[cite: 9].
+  * Rencana: Kode backend Flask, struktur Blueprints (`/auth`, `/predict`, `/notifications`, `/admin`), skema 9 tabel PostgreSQL, dan middleware otentikasi JWT akan dibangun setelah pemilihan model definitif[cite: 2, 3, 9].
 * **Repositori `houseprice-mobile-app`:**
-  * Status: **Selesai Inisialisasi & Slicing UI Fondasi**.
-  * Progres: Inisialisasi arsitektur Clean Architecture (`core/` & `features/`), tema global dan token warna/tipografi, serta *slicing* antarmuka utama (Beranda, Form Spesifikasi Properti, Hasil Estimasi, Riwayat, Favorit, Pengaturan) telah berhasil diimplementasikan dengan mock data dan validasi lokal[cite: 24, 25, 31].
+  * Status: **Selesai Slicing Fondasi & Re-Slicing Modul Baru**.
+  * Progres: Slicing antarmuka awal (Beranda pasar, Form Spesifikasi Properti, Hasil Estimasi, dan Kalkulator KPR) telah selesai diimplementasikan[cite: 8, 9]. Namun, akibat penambahan requirement kritis dari dosen di pertengahan Sprint 1 (*Strict Gate Authentication*, Splash, Onboarding, Landing Page, Notifikasi, dan Profil), dibuka tugas *slicing* antarmuka lanjutan yang ditugaskan khusus kepada **@nurilhuda**[cite: 2, 8].
 
 ---
 
 ## 2. Target Capaian Sprint 1 (Sprint Goals)
 
-Sprint 1 difokuskan untuk menyelesaikan fondasi pada ketiga repositori sebelum masuk ke tahap integrasi penuh[cite: 8, 31, 33]:
-1. **Machine Learning:** Menuntaskan tabel komparasi metrik uji ($R^2$, MAE, RMSE) antar-algoritma pada repositori `ml-model-testing`, memilih satu algoritma dengan performa terbaik ($R^2 \ge 0,80$), serta mengekspor artefak model final `.pkl`[cite: 27, 33, 40].
-2. **Mobile (Flutter):** Melakukan inisialisasi basis kode Flutter, menyusun arsitektur folder berlapis (*Layered Architecture*), serta menyelesaikan *slicing* UI untuk Beranda dan Form Spesifikasi Properti lengkap dengan validasi lokal[cite: 24, 25, 31].
-3. **Backend Skeleton:** Menginisialisasi repositori `houseprice-backend-ml`, menyiapkan berkas dependensi (`requirements.txt`, `Dockerfile`), dan memuat model `.pkl` hasil eksperimen untuk melayani endpoint inferensi dasar[cite: 27, 41].
-4. **PMPL:** Menyusun matriks uji *Boundary Value Analysis* (BVA) dan *Equivalence Partitioning* (EP) untuk memvalidasi masukan form properti saat selesai di-*slicing*[cite: 19, 27, 31].
+Sprint 1 difokuskan untuk menyelesaikan fondasi pada ketiga repositori serta menuntaskan seluruh antarmuka pengguna sebelum masuk ke tahap integrasi API penuh[cite: 8, 9]:
+1. **Machine Learning:** Menuntaskan tabel komparasi metrik uji ($R^2$, MAE, RMSE) antar-algoritma pada repositori `ml-model-testing`, memilih satu algoritma dengan performa terbaik ($R^2 \ge 0,80$), serta mengekspor artefak model final `.pkl`[cite: 9].
+2. **Mobile (Flutter Slicing & Flow):**
+   * Menyelesaikan *slicing* modul pre-otentikasi: Splash Screen, 3 Slide Onboarding Carousel, dan Landing Page[cite: 8].
+   * Menyelesaikan *slicing* formulir otentikasi: Login dan Registrasi akun (Strict Gate) lengkap dengan validasi visual lokal[cite: 7, 8].
+   * Menyelesaikan *slicing* modul pelengkap: Layar Notifikasi In-App dan Layar Profil Pengguna (termasuk kartu riwayat prediksi)[cite: 2, 8].
+   * Memperbarui scaffold navigasi utama menjadi 5 Tab Bottom Navigation Bar (Beranda, Estimasi, KPR, Notifikasi, Profil)[cite: 8].
+3. **Backend Skeleton:** Menginisialisasi repositori `houseprice-backend-ml`, menyiapkan struktur dasar Flask, migrasi skema tabel PostgreSQL (`users`, `notifications`, `prediction_logs`), dan endpoint dasar[cite: 2, 9].
+4. **PMPL:** Menyusun matriks pengujian *Boundary Value Analysis* (BVA), *Equivalence Partitioning* (EP) untuk form auth dan properti, serta skenario verifikasi *Navigation Guard*[cite: 7, 9].
 
 ---
 
 ## 3. Papan Tugas Kanban Sprint 1 (Sprint 1 Kanban Board)
 
 ```
-+-----------------------------------------------------------------------------------+
-| BACKLOG / TO DO           | IN PROGRESS                 | DONE                    |
-+-----------------------------------------------------------------------------------+
-| [BE]  Init Repo Flask     | [ML] Eksperimen Model       | [DOC] Proposal Disetujui|
-| [BE]  Setup Docker & DB   |      (Random Forest vs      | [DOC] Dokumen Root Selesai|
-| [ML]  Export Model .pkl   |       Baseline & Boosting)  | [DES] UI Design Mockup  |
-|                           | [QA] Penyusunan Skenario    | [MOB] Init Flutter Repo |
-|                           |      Test Case BVA / EP     | [MOB] Slicing UI Beranda|
-|                           |                             | [MOB] Slicing Form Input|
-+-----------------------------------------------------------------------------------+
++---------------------------------------------------------------------------------------------------------+
+| BACKLOG / TO DO                     | IN PROGRESS                             | DONE                    |
++---------------------------------------------------------------------------------------------------------+
+| [MOB] Slicing Splash & Onboard      | [MOB] Slicing UI Landing Page           | [DOC] Proposal Baseline |
+|       (@nurilhuda)                  |       (@nurilhuda)                      | [DOC] Revisi PRD & Specs|
+| [MOB] Slicing Form Login & Register | [ML]  Eksperimen Komparasi Model        | [DES] UI Design Mockup  |
+|       (@nurilhuda)                  |       (Random Forest vs XGBoost)        | [MOB] Init Flutter Repo |
+| [MOB] Slicing Notifikasi & Profil   | [QA]  Penyusunan Test Case Auth & BVA   | [MOB] Slicing Beranda   |
+|       (@nurilhuda)                  | [BE]  Inisialisasi Blueprint Auth & DB  | [MOB] Slicing Form ML   |
+| [BE]  Setup Docker & DB Schema      |                                         | [MOB] Slicing KPR Calc  |
+| [ML]  Export Model Final .pkl       |                                         |                         |
++---------------------------------------------------------------------------------------------------------+
 ```
 
 ### Rincian Pembagian Tugas Anggota Tim:
 
-#### A. Trek Sains Data & Machine Learning (Repo: `ml-model-testing`)
-* **Abdul Rahman Hanif Darmawan:**
-  * Menyusun dokumentasi perbandingan distribusi fitur pada notebook eksplorasi data (EDA)[cite: 19, 28, 33].
+#### A. Trek Mobile App (Repo: `houseprice-mobile-app`)
+* **Muhammad Nuril Huda (@nurilhuda):**
+  * **[TASK-MOB-01] Slicing UI Splash Screen & Onboarding Carousel:**
+    * Mengimplementasikan Splash Screen dengan animasi loading dan inisialisasi state[cite: 8].
+    * Membangun 3 kartu *carousel slider* proposisi fitur (Prediksi ML, Cek Kewajaran, Kalkulator KPR) lengkap dengan *dot indicators* dan tombol aksi Lewati/Mulai[cite: 8].
+  * **[TASK-MOB-02] Slicing UI Landing Page:**
+    * Mengimplementasikan halaman pembuka sebelum otentikasi dengan tombol aksi Masuk (`GradientButton`) dan Daftar Akun (`OutlinedButton`)[cite: 8].
+  * **[TASK-MOB-03] Slicing UI Formulir Login & Register:**
+    * Membangun form login dan register dengan styling abu-abu rounded (`#EFF2F7`), prefix icon, icon toggle penyamaran kata sandi (*obscure text*), serta label penanganan pesan galat[cite: 8].
+  * **[TASK-MOB-04] Slicing UI Pusat Notifikasi In-App:**
+    * Membangun tampilan daftar pesan notifikasi tren harga pasar, status belum dibaca (*soft blue background*), dan badge indikator merah[cite: 8].
+  * **[TASK-MOB-05] Slicing UI Layar Profil & Riwayat Cloud:**
+    * Membangun kartu informasi pengguna terdaftar, kartu list riwayat estimasi personal, serta tombol Logout dengan dialog konfirmasi[cite: 7, 8].
+  * **[TASK-MOB-06] Konfigurasi 5 Tab Bottom Navigation:**
+    * Memperbarui komponen `main_navigation.dart` agar mengintegrasikan 5 tab: Beranda, Prediksi, KPR, Notifikasi, dan Profil[cite: 8].
 * **Jasmine Nasywa Nabilah:**
-  * Memastikan penanganan 526 baris duplikat terintegrasi pada pipeline pembersihan data[cite: 19, 28, 33].
-* **Nurfinka Lailasari:**
-  * Mengeksekusi penanganan missing values pada atribut `surface_area` dan `building_area`[cite: 19, 29, 33].
-* **Naufal Abid Aurizky:**
-  * Mengonfigurasi pemfilteran pencilan (*outliers*) berbasis rentang IQR serta One-Hot Encoding fitur wilayah (`city`, `district`)[cite: 19, 27, 33].
-* **Muhammad Nuril Huda:**
-  * Melanjutkan pengujian algoritma komparasi (Random Forest vs Linear Regression vs Gradient Boosting/XGBoost)[cite: 19, 27, 33].
-  * Melakukan pencatatan metrik evaluasi ($R^2$ Score, MAE, RMSE) pada masing-masing model untuk menentukan algoritma pemenang[cite: 19, 27, 33].
+  * Mengonfigurasi aset gambar vektor dan palet warna baru pada `app_colors.dart` untuk modul autentikasi dan notifikasi[cite: 8, 9].
+  * Melakukan review tampilan UI untuk memastikan tidak ada *RenderFlex overflow* saat keyboard virtual terbuka pada layar auth dan form properti[cite: 7].
+* **Abdul Rahman Hanif Darmawan:**
+  * Memastikan logika validasi lokal form spesifikasi properti terhubung dengan benar ke alur navigasi hasil estimasi[cite: 8, 9].
 
-#### B. Trek Mobile App (Repo: `houseprice-mobile-app`)
-* **Jasmine Nasywa Nabilah:**
-  * Melakukan inisialisasi project Flutter (`flutter create`)[cite: 31, 34].
-  * Mengonfigurasi UI Design System (skema palet warna, tipografi, dan aset ikon/gambar)[cite: 19, 31].
-  * Memulai *slicing* tampilan layar Beranda (ringkasan statistik harga rumah)[cite: 19, 24, 31].
+#### B. Trek Sains Data & Machine Learning (Repo: `ml-model-testing`)
+* **Muhammad Nuril Huda:**
+  * Menyelesaikan pengujian algoritma komparasi (Random Forest vs Linear Regression vs Gradient Boosting/XGBoost)[cite: 9].
+  * Mencatat perbandingan metrik evaluasi ($R^2$ Score, MAE, RMSE) untuk menentukan artefak model terbaik[cite: 9].
 * **Abdul Rahman Hanif Darmawan:**
-  * Memulai *slicing* antarmuka Form Spesifikasi Properti (field luas tanah, luas bangunan, jumlah kamar tidur, kamar mandi, carport, dan dropdown wilayah)[cite: 19, 24, 31].
-  * Menulis logika validasi masukan form lokal (penolakan angka nol, minus, dan karakter huruf)[cite: 19, 27, 31].
+  * Mendokumentasikan hasil perbandingan performa model dan distribusi galat prediksi pada notebook EDA[cite: 9].
+* **Naufal Abid Aurizky:**
+  * Mengonfigurasi pipeline praproses fitur: pemfilteran *outlier* IQR dan skema encoding area wilayah (`master_locations`)[cite: 1, 9].
+* **Nurfinka Lailasari:**
+  * Menuntaskan evaluasi penanganan missing values pada atribut luas tanah dan luas bangunan[cite: 9].
+* **Jasmine Nasywa Nabilah:**
+  * Memverifikasi eliminasi baris duplikat pada dataset properti latih[cite: 9].
 
 #### C. Trek Backend & Basis Data (Repo: `houseprice-backend-ml`)
 * **Abdul Rahman Hanif Darmawan & Muhammad Nuril Huda:**
-  * Melakukan inisialisasi struktur repositori backend Flask setelah model ML terpilih[cite: 19, 28, 33].
-  * Menyiapkan konfigurasi kontainer `Dockerfile` dan `docker-compose.yml` untuk lingkungan pengujian staging[cite: 41].
+  * Melakukan inisialisasi struktur repositori backend Flask (Blueprint `/api/v1/auth`, `/api/v1/predict`, `/api/v1/notifications`)[cite: 2, 3, 9].
+  * Menyiapkan skrip DDL PostgreSQL untuk membentuk 9 tabel (termasuk tabel baru `users` dan `notifications`)[cite: 1, 2].
+  * Menyiapkan konfigurasi `Dockerfile` dan `docker-compose.yml` untuk deployment di VPS Coolify[cite: 3, 9].
 
 #### D. Trek Penjaminan Mutu Perangkat Lunak (PMPL)
-* **Jasmine Nasywa Nabilah:**
-  * Merancang tabel skenario uji coba Blackbox (BVA dan EP) untuk form properti berdasarkan layout desain yang ada[cite: 19, 27, 31].
 * **Nurfinka Lailasari:**
-  * Menyiapkan lembar pencatatan cacat (*Defect Tracking Sheet*) untuk mendokumentasikan setiap kendala yang muncul selama proses *slicing* dan pelatihan model[cite: 19, 29, 32].
+  * Menyiapkan matriks pelacakan cacat (*Defect Tracking Log*) untuk mendokumentasikan kendala pengujian antarmuka auth, form, dan latensi model[cite: 7, 9].
+* **Jasmine Nasywa Nabilah:**
+  * Menyusun tabel skenario uji Blackbox (BVA dan EP) untuk formulir registrasi, formulir login, dan validasi form properti[cite: 7, 9].
+* **Abdul Rahman Hanif Darmawan:**
+  * Menyiapkan skrip uji coba Postman Collection Runner untuk pengujian rute endpoint auth dan inferensi terproteksi Bearer Token[cite: 2, 7].
 
 ---
 
 ## 4. Kriteria Penyelesaian Sprint 1 (Definition of Done)
 
-Sprint 1 dinyatakan tuntas dan siap dipresentasikan pada evaluasi Milestone 1 jika memenuhi parameter berikut[cite: 8, 14]:
-1. **Laporan Benchmark Model ML:** Tersedia tabel perbandingan performa antar-algoritma pada `ml-model-testing` dengan skor $R^2 \ge 0,80$ pada model terpilih[cite: 27, 40].
-2. **Artefak Model Tersimpan:** Model terbaik berhasil diekspor ke dalam format biner `.pkl` menggunakan pustaka `joblib`[cite: 27, 33].
-3. **Aplikasi Mobile Terpasang:** Aplikasi Flutter dapat dijalankan pada perangkat fisik Android atau emulator, dengan tampilan Beranda dan Form Input yang telah terpasang rapi sesuai desain UI[cite: 14, 27, 31].
-4. **Validasi Form Berfungsi:** Form input menolak nilai tidak sah sesuai rancangan pengujian nilai batas BVA/EP[cite: 27, 31].
+Sprint 1 dinyatakan tuntas dan siap dipresentasikan pada evaluasi Milestone 1 jika memenuhi parameter berikut[cite: 9]:
+1. **Model ML Terpilih & Terekspor:** Model regresi terbaik telah ditentukan dengan metrik $R^2 \ge 0,80$ dan berhasil diekspor menjadi berkas biner `.pkl` menggunakan `joblib`[cite: 9].
+2. **Kelengkapan Slicing Antarmuka Mobile:** Aplikasi Flutter berjalan lancar pada perangkat Android dengan alur navigasi lengkap:
+   * `Splash Screen` $\rightarrow$ `Onboarding Carousel` $\rightarrow$ `Landing Page` $\rightarrow$ `Login / Register` $\rightarrow$ `5 Tab Dashboard` (Beranda, Prediksi ML, KPR, Notifikasi, Profil)[cite: 7, 8].
+3. **Validasi Formulir Berfungsi:** Seluruh form (pendaftaran, login, dan spesifikasi properti) menolak masukan kosong atau tidak valid secara visual di sisi klien sesuai matriks BVA/EP[cite: 7, 9].
+4. **Struktur Backend & DB Siap:** Repositori Flask telah terinisialisasi dan skema 9 tabel PostgreSQL berhasil dieksekusi melalui skrip migrasi DDL[cite: 1, 2].

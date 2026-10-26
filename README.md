@@ -4,59 +4,78 @@
 [![Flutter](https://img.shields.io/badge/Mobile-Flutter%203.x-02569B?logo=flutter)](https://flutter.dev)
 [![Flask](https://img.shields.io/badge/Backend-Flask%20Python-000000?logo=flask)](https://flask.palletsprojects.com/)
 [![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL%2015+-4169E1?logo=postgresql)](https://www.postgresql.org/)
+[![JWT](https://img.shields.io/badge/Auth-Strict%20Gate%20JWT-red.svg)](https://jwt.io/)
 [![License](https://img.shields.io/badge/License-Academic%20PBL-green.svg)]()
 
-> Repositori Pusat Dokumentasi & Standar Arsitektur Sistem untuk Proyek Terintegrasi Product-Based Learning (PBL) Semester 5, Jurusan Teknologi Informasi, Politeknik Negeri Malang (T.A. 2026/2027).
+> Repositori Pusat Dokumentasi & Standar Arsitektur Sistem untuk Proyek Terintegrasi Product-Based Learning (PBL) Semester 5, Jurusan Teknologi Informasi, Politeknik Negeri Malang (T.A. 2026/2027)[cite: 10].
 
 ---
 
 ## 📌 Ringkasan Eksekutif
-Masyarakat, khususnya keluarga muda dan pendatang dari luar daerah, sering mengalami asimetri informasi saat membeli atau menjual rumah di DKI Jakarta. Sulit menilai apakah harga penawaran tergolong murah, wajar, atau terlalu mahal. 
+Masyarakat dan keluarga muda sering menghadapi asimetri informasi saat membeli atau menjual rumah di DKI Jakarta, sehingga sulit menilai apakah harga penawaran tergolong murah, wajar, atau terlalu mahal[cite: 10]. 
 
-**HousePrice** hadir sebagai solusi komprehensif terintegrasi:
-1. **Aplikasi Mobile (Flutter):** Antarmuka pengguna untuk cek estimasi harga properti secara instan, mengevaluasi kewajaran penawaran harga penjual, simulasi kalkulator KPR, dan riwayat kalkulasi offline.
-2. **RESTful Inference API (Flask):** Mesin inferensi cloud berlatensi rendah (< 1,5 detik) berbasis model Machine Learning Ensemble (Random Forest Regressor) yang dilatih menggunakan 10.000 data historis properti Jakarta.
-3. **Web Dashboard Admin (Flask & Jinja/Bootstrap):** Portal khusus administrator teknis untuk pemantauan performa model ($R^2$, MAE, RMSE), unggah dataset baru, dan eksekusi retraining model terprogram.
-4. **Basis Data Terpusat (PostgreSQL):** Penyimpanan relasional untuk master wilayah, log audit sistem, riwayat inferensi, dan metadata registrasi model.
+**HousePrice** hadir sebagai solusi komprehensif terintegrasi berbasis keamanan ketat (*Strict Gate Authentication*)[cite: 3, 10]:
+1. **Aplikasi Mobile (Flutter):** Mengimplementasikan alur Splash Screen dinamis, Carousel Onboarding, Landing Page, pendaftaran akun & login terenkripsi, visualisasi tren pasar, inferensi harga properti instan, evaluasi kelayakan harga penawaran pasar, kalkulator simulasi KPR (anuitas), pusat notifikasi in-app, serta profil pengguna yang memuat riwayat kalkulasi terintegrasi cloud[cite: 2, 8, 10].
+2. **RESTful Inference & Services API (Flask):** Mesin inferensi cloud berlatensi rendah (< 1,5 detik) berbasis model Machine Learning Ensemble (*Random Forest Regressor*) terproteksi Bearer JWT Token, layanan otentikasi Bcrypt, agregasi statistik wilayah, serta manajemen pesan notifikasi[cite: 2, 4, 10].
+3. **Web Dashboard Admin (Flask & Bootstrap):** Portal khusus administrator teknis untuk pemantauan performa model aktif ($R^2$, MAE, RMSE), manajemen dataset properti CSV, pemicu pelatihan ulang model (*retraining*), dan pencatatan jejak audit sistem (*system audit logs*)[cite: 1, 10].
+4. **Basis Data Terpusat (PostgreSQL):** Arsitektur 9 tabel relasional yang mengelola kredensial admin, akun mobile pengguna terotentikasi, master referensi wilayah Jakarta, metadata dataset, registri model ML, statistik pasar, notifikasi pengguna, telemetri prediksi berelasi `user_id`, dan log audit keamanan[cite: 1, 2].
 
 ---
 
-## 👥 Tim Pengembang (Kelompok 2 - TI 2G)
+## 👥 Tim Pengembang (Kelompok 2 - TI 3G)
 
-| Nama Mahasiswa | NIM | Peran Utama & Fokus MK |
+| Nama Mahasiswa | NIM | Peran Utama & Fokus MK Terintegrasi |
 | :--- | :--- | :--- |
-| **Abdul Rahman Hanif Darmawan** | 244107020232 | **Project Manager**, ML EDA & Visualisasi, Mobile Form & Validasi, Integration & Performance QA |
-| **Muhammad Nuril Huda** | 244107020004 | ML Model Engineering & Tuning, Mobile Core Prediction & Networking, Usability QA |
-| **Nurfinka Lailasari** | 244107020211 | ML Data Cleaning (Missing), Mobile Result UI & Local DB, QA Lead & Defect Tracking |
-| **Naufal Abid Aurizky** | 244107020212 | ML Outlier Handling & Preprocessing, Mobile Business Logic (Kewajaran & KPR), Logic QA |
-| **Jasmine Nasywa Nabilah** | 244107020119 | ML Duplicate Cleaning, Mobile Home UI & Design System, Blackbox BVA/EP QA |
+| **Abdul Rahman Hanif Darmawan** | 244107020232 | **Project Manager & QA Integration**, EDA & Visualisasi ML, Form Input Spesifikasi & Validasi Mobile, Uji Integrasi API & Keamanan Token JWT[cite: 7, 10] |
+| **Muhammad Nuril Huda** | 244107020004 | **ML & Networking Engineer**, Training & Tuning Model Regresi (.pkl), *Slicing* Antarmuka Modul Baru (Splash, Onboard, Landing, Auth, Notif, Profil), HTTP Client AuthInterceptor & State Management[cite: 7, 9, 10] |
+| **Nurfinka Lailasari** | 244107020211 | **QA Lead & Local Storage**, Pembersihan Missing Values ML, Penyimpanan Sesi Aman (`flutter_secure_storage`), Profil & Riwayat Prediksi Cloud, Defect Tracking & STR[cite: 7, 9, 10] |
+| **Naufal Abid Aurizky** | 244107020212 | **Preprocessing & Business Logic**, Penanganan Outliers IQR & Feature Encoding ML, Logika Bisnis Evaluasi Harga Pasar, Formula Bunga Anuitas KPR, Endpoint Notifikasi API[cite: 7, 9, 10] |
+| **Jasmine Nasywa Nabilah** | 244107020119 | **Data Duplicate & Mobile UI**, Pembersihan Baris Duplikat ML, UI Design System Mobile, Slicing Beranda Pasar Properti, Blackbox Testing (BVA/EP) Form[cite: 7, 9, 10] |
 
 ### 👨‍🏫 Dosen Pembimbing Mata Kuliah Terintegrasi
-* **Pemrograman Mobile:** Habibie Ed Dien, S.Kom., M.T.
-* **Pembelajaran Mesin:** Usman Nurhasan, S.Kom., M.T.
-* **Penjaminan Mutu Perangkat Lunak:** M. Hasyim Ratsanjani, S.Kom., M.Kom.
+* **Pemrograman Mobile:** Habibie Ed Dien, S.Kom., M.T.[cite: 10]
+* **Pembelajaran Mesin:** Usman Nurhasan, S.Kom., M.T.[cite: 10]
+* **Penjaminan Mutu Perangkat Lunak:** M. Hasyim Ratsanjani, S.Kom., M.Kom.[cite: 10]
 
 ---
 
 ## 🗺️ Struktur Repositori Organisasi
 
-Proyek ini dikelola dalam organisasi GitHub resmi menggunakan struktur multi-repo:
+Proyek ini dikelola secara modular pada organisasi GitHub resmi [**TI3G-PBL-House-Price**](https://github.com/TI3G-PBL-House-Price):
 
-* [**`houseprice-docs`**](https://github.com/PBL-House-Price/houseprice-docs) (Repositori Ini): Blueprint arsitektur, PRD, standar QA, dan pedoman engineering.
-* [**`houseprice-mobile-app`**](https://github.com/PBL-House-Price/houseprice-mobile-app): Kode sumber aplikasi Android Flutter (BLoC/Provider, SQLite/Shared Preferences).
-* [**`houseprice-backend-ml`**](https://github.com/PBL-House-Price/houseprice-backend-ml): Layanan RESTful API Flask, Web Admin, skrip migrasi PostgreSQL, dan model final `.pkl`.
-* [**`ml-model-testing`**](https://github.com/PBL-House-Price/ml-model-testing): Notebook riset eksperimen ML, eksplorasi EDA, hyperparameter tuning, dan benchmark model regresi.
+* [**`houseprice-docs`**](https://github.com/TI3G-PBL-House-Price/houseprice-docs) (Repositori Ini): Sumber kebenaran tunggal dokumentasi, mencakup PRD, diagram arsitektur C4, spesifikasi OpenAPI 3.0, skema DDL data model, kebijakan privasi & keamanan, serta panduan pengujian mutu PMPL[cite: 2, 3, 10].
+* [**`houseprice-mobile-app`**](https://github.com/TI3G-PBL-House-Price/houseprice-mobile-app): Kode sumber aplikasi Android Flutter berbasis Clean Architecture, manajemen sesi aman (`flutter_secure_storage`), 5 Tab Bottom Navigation, dan state management BLoC/Cubit[cite: 3, 8, 10].
+* [**`houseprice-backend-ml`**](https://github.com/TI3G-PBL-House-Price/houseprice-backend-ml): Layanan RESTful API Flask terproteksi JWT, controller Web Admin, skrip migrasi 9 tabel PostgreSQL, dan pemuat model produksi `.pkl`[cite: 2, 3, 10].
+* [**`ml-model-testing`**](https://github.com/TI3G-PBL-House-Price/ml-model-testing): Notebook riset eksperimen Machine Learning, pipeline praproses tabular, komparasi algoritma (Random Forest vs XGBoost vs Linear Regression), dan evaluasi metrik ($R^2 \ge 0,80$)[cite: 9, 10].
 
 ---
 
-## 🚀 Quick Start & Deployment Overview
+## 📱 Alur Antarmuka & Fitur Utama Mobile
 
-Backend dan database dideploy menggunakan platform open-source **Coolify** dengan dukungan **Docker Compose**.
+Aplikasi mobile dirancang dengan alur navigasi terproteksi penuh (*Strict Gate Flow*)[cite: 3]:
+1. **Inisialisasi & Pengenalan:** `Splash Screen` memeriksa ketersediaan sesi $\rightarrow$ Pengguna baru diarahkan ke `3 Carousel Slide Onboarding` $\rightarrow$ `Landing Page`[cite: 3, 8].
+2. **Gerbang Autentikasi (Strict Gate):** Layar `Login` dan `Register` untuk verifikasi kredensial pengguna baru dan penerbitan access token JWT[cite: 2, 8].
+3. **5 Tab Dashboard Utama:**
+   * **Beranda:** Ringkasan tren harga pasar properti dan filter kota administrasi DKI Jakarta[cite: 8].
+   * **Prediksi:** Formulir spesifikasi rumah (LT, LB, kamar tidur, kamar mandi, carport, kecamatan, kota) untuk kalkulasi taksiran nilai pasar[cite: 2, 8].
+   * **KPR:** Kalkulator simulasi pembiayaan perbankan berbasis metode anuitas dan evaluasi rasio kelayakan DSR[cite: 7, 8].
+   * **Notifikasi:** Pusat informasi perkembangan tren harga per wilayah dan pembaruan sistem in-app[cite: 2, 8].
+   * **Profil:** Identitas akun, daftar riwayat pencarian estimasi cloud personal, ubah kata sandi, dan tombol *Logout*[cite: 2, 8].
+
+---
+
+## 🚀 Quick Start & Panduan Deployment
+
+Backend Flask dan basis data PostgreSQL dijalankan secara terisolasi menggunakan platform open-source **Coolify** dengan dukungan **Docker Compose**[cite: 3, 10]:
 
 ```bash
-# Menjalankan backend dan database di server lokal / staging
-git clone https://github.com/PBL-House-Price/houseprice-backend-ml.git
+# Clone repositori backend
+git clone [https://github.com/TI3G-PBL-House-Price/houseprice-backend-ml.git](https://github.com/TI3G-PBL-House-Price/houseprice-backend-ml.git)
 cd houseprice-backend-ml
+
+# Salin konfigurasi lingkungan
 cp .env.example .env
+
+# Jalankan kontainer backend dan database PostgreSQL
 docker compose up -d --build
 ```
