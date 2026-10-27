@@ -38,14 +38,20 @@ Sprint 1 difokuskan untuk menyelesaikan fondasi pada ketiga repositori serta men
 +---------------------------------------------------------------------------------------------------------+
 | BACKLOG / TO DO                     | IN PROGRESS                             | DONE                    |
 +---------------------------------------------------------------------------------------------------------+
-| [MOB] Slicing Splash & Onboard      | [MOB] Slicing UI Landing Page           | [DOC] Proposal Baseline |
-|       (@nurilhuda)                  |       (@nurilhuda)                      | [DOC] Revisi PRD & Specs|
-| [MOB] Slicing Form Login & Register | [ML]  Eksperimen Komparasi Model        | [DES] UI Design Mockup  |
-|       (@nurilhuda)                  |       (Random Forest vs XGBoost)        | [MOB] Init Flutter Repo |
-| [MOB] Slicing Notifikasi & Profil   | [QA]  Penyusunan Test Case Auth & BVA   | [MOB] Slicing Beranda   |
-|       (@nurilhuda)                  | [BE]  Inisialisasi Blueprint Auth & DB  | [MOB] Slicing Form ML   |
-| [BE]  Setup Docker & DB Schema      |                                         | [MOB] Slicing KPR Calc  |
-| [ML]  Export Model Final .pkl       |                                         |                         |
+| [MOB] Slicing Notifikasi & Profil   | [ML]  Eksperimen Komparasi Model        | [DOC] Proposal Baseline |
+|       (@nurilhuda)                  |       (Random Forest vs XGBoost)        | [DOC] Revisi PRD & Specs|
+| [BE]  Setup Docker & DB Schema      | [QA]  Penyusunan Test Case Auth & BVA   | [DES] UI Design Mockup  |
+| [ML]  Export Model Final .pkl       | [BE]  Inisialisasi Blueprint Auth & DB  | [MOB] Init Flutter Repo |
+|                                     |                                         | [MOB] Slicing Beranda   |
+|                                     |                                         | [MOB] Slicing Form ML   |
+|                                     |                                         | [MOB] Slicing KPR Calc  |
+|                                     |                                         | [MOB] Splash Timer 3s   |
+|                                     |                                         | [MOB] Onboarding Slider |
+|                                     |                                         | [MOB] Landing Page Pub  |
+|                                     |                                         | [MOB] Auth Sesi & Gate  |
+|                                     |                                         | [MOB] AppBar Login Btn  |
+|                                     |                                         | [MOB] Result HitungUlang|
+|                                     |                                         | [MOB] Auto-Save Riwayat |
 +---------------------------------------------------------------------------------------------------------+
 ```
 
@@ -53,24 +59,27 @@ Sprint 1 difokuskan untuk menyelesaikan fondasi pada ketiga repositori serta men
 
 #### A. Trek Mobile App (Repo: `houseprice-mobile-app`)
 * **Muhammad Nuril Huda (@nurilhuda):**
-  * **[TASK-MOB-01] Slicing UI Splash Screen & Onboarding Carousel:**
-    * Mengimplementasikan Splash Screen dengan animasi loading dan inisialisasi state[cite: 8].
-    * Membangun 3 kartu *carousel slider* proposisi fitur (Prediksi ML, Cek Kewajaran, Kalkulator KPR) lengkap dengan *dot indicators* dan tombol aksi Lewati/Mulai[cite: 8].
-  * **[TASK-MOB-02] Slicing UI Landing Page:**
-    * Mengimplementasikan halaman pembuka sebelum otentikasi dengan tombol aksi Masuk (`GradientButton`) dan Daftar Akun (`OutlinedButton`)[cite: 8].
-  * **[TASK-MOB-03] Slicing UI Formulir Login & Register:**
-    * Membangun form login dan register dengan styling abu-abu rounded (`#EFF2F7`), prefix icon, icon toggle penyamaran kata sandi (*obscure text*), serta label penanganan pesan galat[cite: 8].
-  * **[TASK-MOB-04] Slicing UI Pusat Notifikasi In-App:**
-    * Membangun tampilan daftar pesan notifikasi tren harga pasar, status belum dibaca (*soft blue background*), dan badge indikator merah[cite: 8].
-  * **[TASK-MOB-05] Slicing UI Layar Profil & Riwayat Cloud:**
-    * Membangun kartu informasi pengguna terdaftar, kartu list riwayat estimasi personal, serta tombol Logout dengan dialog konfirmasi[cite: 7, 8].
-  * **[TASK-MOB-06] Konfigurasi 5 Tab Bottom Navigation:**
-    * Memperbarui komponen `main_navigation.dart` agar mengintegrasikan 5 tab: Beranda, Prediksi, KPR, Notifikasi, dan Profil[cite: 8].
+  * **[TASK-MOB-01] Slicing UI Splash Screen & Onboarding Carousel (Selesai):**
+    * Splash Screen dengan timer otomatis 3 detik langsung mengarahkan ke Carousel Onboarding tanpa tombol masuk manual.
+    * 3 kartu carousel edukasi proposisi nilai (Prediksi ML, Simulasi KPR, Evaluasi Pasar) dengan indikator titik (*dot indicators*) dan tombol Lewati/Mulai.
+  * **[TASK-MOB-02] Slicing UI Landing Page & AppBar Action (Selesai):**
+    * Halaman pembuka informasi publik yang dapat diakses tanpa login, mempertahankan `BottomNavigationBar` (Beranda, Estimasi, KPR).
+    * Tombol **"Masuk"** di AppBar pojok kanan atas di samping ikon riwayat khusus untuk pengguna yang belum login.
+  * **[TASK-MOB-03] Slicing UI Formulir Login & Register Sesi Mandiri (Selesai):**
+    * Formulir Login & Registrasi dengan styling rounded `#EFF2F7`, toggle penyamaran kata sandi, validasi visual, dan integrasi penyimpanan akun ke `AuthSession`.
+  * **[TASK-MOB-04] Penyederhanaan Layar Hasil & Tombol Hitung Ulang (Selesai):**
+    * Layar Hasil Prediksi (`ResultPage`): Menghapus tombol *Simpan* dan *Bagikan*, digantikan dengan tombol utama **"Hitung Ulang"** (`GradientButton`).
+    * Layar Hasil KPR (`KprResultPage`): Menghapus tombol *Simpan Hasil Simulasi ke Riwayat*, digantikan dengan tombol utama **"Hitung Ulang"** (`GradientButton`).
+  * **[TASK-MOB-05] Proteksi Riwayat & Otomatisasi Pencatatan (Selesai):**
+    * Akses bottom sheet riwayat diproteksi (*guard*): pengguna belum login dialihkan ke Login Page via SnackBar edukatif.
+    * Riwayat kalkulasi mencatat secara otomatis (*auto-record*) setiap kali pengguna menekan tombol "Prediksi Harga" atau "Hitung Simulasi KPR" tanpa tombol simpan manual.
+  * **[TASK-MOB-06] Slicing UI Pusat Notifikasi & Profil Pengguna (To Do):**
+    * Membangun tampilan daftar pesan notifikasi in-app dan pengaturan profil pengguna.
 * **Jasmine Nasywa Nabilah:**
   * Mengonfigurasi aset gambar vektor dan palet warna baru pada `app_colors.dart` untuk modul autentikasi dan notifikasi[cite: 8, 9].
   * Melakukan review tampilan UI untuk memastikan tidak ada *RenderFlex overflow* saat keyboard virtual terbuka pada layar auth dan form properti[cite: 7].
 * **Abdul Rahman Hanif Darmawan:**
-  * Memastikan logika validasi lokal form spesifikasi properti terhubung dengan benar ke alur navigasi hasil estimasi[cite: 8, 9].
+  * Memastikan logika validasi lokal form spesifikasi properti terhubung dengan benar ke alur navigasi hasil estimasi dan penyimpanan riwayat otomatis[cite: 8, 9].
 
 #### B. Trek Sains Data & Machine Learning (Repo: `ml-model-testing`)
 * **Muhammad Nuril Huda:**
@@ -105,7 +114,8 @@ Sprint 1 difokuskan untuk menyelesaikan fondasi pada ketiga repositori serta men
 
 Sprint 1 dinyatakan tuntas dan siap dipresentasikan pada evaluasi Milestone 1 jika memenuhi parameter berikut[cite: 9]:
 1. **Model ML Terpilih & Terekspor:** Model regresi terbaik telah ditentukan dengan metrik $R^2 \ge 0,80$ dan berhasil diekspor menjadi berkas biner `.pkl` menggunakan `joblib`[cite: 9].
-2. **Kelengkapan Slicing Antarmuka Mobile:** Aplikasi Flutter berjalan lancar pada perangkat Android dengan alur navigasi lengkap:
-   * `Splash Screen` $\rightarrow$ `Onboarding Carousel` $\rightarrow$ `Landing Page` $\rightarrow$ `Login / Register` $\rightarrow$ `5 Tab Dashboard` (Beranda, Prediksi ML, KPR, Notifikasi, Profil)[cite: 7, 8].
-3. **Validasi Formulir Berfungsi:** Seluruh form (pendaftaran, login, dan spesifikasi properti) menolak masukan kosong atau tidak valid secara visual di sisi klien sesuai matriks BVA/EP[cite: 7, 9].
-4. **Struktur Backend & DB Siap:** Repositori Flask telah terinisialisasi dan skema 9 tabel PostgreSQL berhasil dieksekusi melalui skrip migrasi DDL[cite: 1, 2].
+2. **Kelengkapan Slicing Antarmuka Mobile:** Aplikasi Flutter berjalan lancar pada perangkat dengan alur navigasi lengkap:
+   * `Splash Screen` (Timer otomatis 3s) $\rightarrow$ `Onboarding Carousel` $\rightarrow$ `Landing Page` (Menu bawah Beranda, Estimasi, KPR dengan tombol Masuk di AppBar) $\rightarrow$ `Login / Register` (Sesi mandiri tanpa dummy).
+   * Layar Hasil Prediksi & KPR telah disederhanakan menggunakan tombol tunggal **"Hitung Ulang"** (`GradientButton`), dan pencatatan riwayat kalkulasi berjalan otomatis (*auto-record*) dengan proteksi login.
+3. **Validasi Formulir & Otomasi Pengujian Berfungsi:** Seluruh form (pendaftaran, login, dan spesifikasi properti) menolak masukan kosong atau tidak valid secara visual, serta seluruh 16 pengujian otomatis (`flutter test`) dan `flutter analyze` lulus 100%.
+4. **Struktur Backend & DB Siap:** Repositori Flask telah terinisialisasi dan skema 9 tabel PostgreSQL siap dieksekusi melalui skrip migrasi DDL[cite: 1, 2].

@@ -24,11 +24,12 @@ Repositori: `houseprice-mobile-app` (Kondisi saat ini: Inisialisasi arsitektur C
 | **MOB-02** | Beranda (Fitur 1) | *Slicing* antarmuka Beranda dari desain UI: kartu statistik ringkasan pasar properti, tombol aksi cepat, dan daftar properti rekomendasi. | M | Sprint 1 | Jasmine | **Done** |
 | **MOB-03** | Form Input (Fitur 2) | *Slicing* form 7 spesifikasi properti (luas tanah min. 30 m², bangunan, kamar, carport, dropdown wilayah) dan validasi masukan lokal. | M | Sprint 1 | Hanif | **Done** |
 | **MOB-04** | Core Networking (Fitur 2) | Integrasi REST API Client dan State Management (Provider/BLoC) untuk menghubungkan form mobile ke backend inferensi cloud. | M | Sprint 2 | Nuril | To Do |
-| **MOB-05** | Layar Hasil (Fitur 2 & 3) | Pembuatan kartu visual penampil nominal estimasi harga, rentang toleransi pasar wajar, ringkasan spesifikasi, dan tombol simpan riwayat. | M | Sprint 2 | Nurfinka | To Do |
-| **MOB-06** | Cek Kewajaran (Fitur 3) | Implementasi komponen input harga penawaran penjual di dalam Layar Hasil dan logika evaluasi status (*Murah, Wajar, Mahal* deviasi $\pm 10\%$). | M | Sprint 2 | Naufal | To Do |
-| **MOB-07** | Simulasi KPR (Fitur 4) | Pembuatan kalkulator cicilan KPR bunga anuitas bulanan, input pendapatan bersih bulanan, komposisi pokok vs bunga, dan rasio kelayakan DSR OJK $\le 40\%$. | M | Sprint 2 | Naufal | To Do |
-| **MOB-08** | Riwayat Lokal (Fitur 5) | Implementasi database lokal SQLite untuk menyimpan dan membaca riwayat kalkulasi estimasi & KPR secara *offline* melalui dialog/bottom sheet. | S | Sprint 2 | Nurfinka | To Do |
+| **MOB-05** | Layar Hasil (Fitur 2 & 3) | Kartu nominal estimasi harga, rentang pasar wajar, ringkasan spesifikasi, evaluasi kewajaran, dan tombol tunggal **Hitung Ulang** (tombol simpan/bagikan ditiadakan). | M | Sprint 1 | Nurfinka & Nuril | **Done** |
+| **MOB-06** | Cek Kewajaran (Fitur 3) | Implementasi komponen input harga penawaran penjual di dalam Layar Hasil dan logika evaluasi status (*Murah, Wajar, Mahal* deviasi $\pm 10\%$). | M | Sprint 1 | Naufal | **Done** |
+| **MOB-07** | Simulasi KPR (Fitur 4) | Kalkulator cicilan KPR bunga anuitas bulanan, input pendapatan bulanan, komposisi pokok vs bunga, evaluasi DSR, dan layar hasil dengan tombol **Hitung Ulang**. | M | Sprint 1 | Naufal & Nuril | **Done** |
+| **MOB-08** | Riwayat Perhitungan (Fitur 5) | Penyimpanan riwayat kalkulasi estimasi & KPR secara otomatis (*auto-record*) saat form disubmit, dengan proteksi autentikasi sebelum membuka riwayat. | M | Sprint 1 | Nurfinka & Nuril | **Done** |
 | **MOB-09** | UI Polish & Error View | Penanganan indikator *loading shimmer*, dialog koneksi putus (*graceful degradation*), dan adaptabilitas layar Android. | S | Sprint 3 | Jasmine & Nuril | To Do |
+| **MOB-10** | Pre-Auth Flow & Login Gate | Alur Splash Screen timer 3 detik, Onboarding Carousel 3 slide, Landing Page publik (menu bawah), serta tombol Masuk di AppBar. | M | Sprint 1 | Nuril | **Done** |
 
 ---
 
