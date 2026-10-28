@@ -10,8 +10,8 @@ Dokumen ini memuat fokus kerja, papan aktivitas kanban, target capaian, serta pe
   * Status: **Aktif (Fase Eksperimen)**[cite: 9].
   * Progres: Pengujian eksplorasi algoritma sedang berjalan[cite: 9]. Model *Random Forest Regressor* telah diuji coba[cite: 9]. Algoritma pembanding lain (seperti *Multiple Linear Regression* sebagai baseline dan *Gradient Boosting / XGBoost*) sedang disiapkan untuk diuji pada dataset `jakarta_house.csv` sebelum menetapkan model final[cite: 9].
 * **Repositori `houseprice-backend-ml`:**
-  * Status: **Belum Diinisialisasi (Kosong)**[cite: 9].
-  * Rencana: Kode backend Flask, struktur Blueprints (`/auth`, `/predict`, `/notifications`, `/admin`), skema 9 tabel PostgreSQL, dan middleware otentikasi JWT akan dibangun setelah pemilihan model definitif[cite: 2, 3, 9].
+  * Status: **Selesai Diinisialisasi (Inisiasi Fondasi & Auth Selesai)**.
+  * Capaian: Arsitektur Flask Application Factory (`create_app`), modularitas Blueprints (`/auth`, `/predict`, `/notifications`, `/admin`), skema 9 tabel relasional PostgreSQL lengkap dengan migrasi awal Alembic (`e70def023971_create_initial_9_tables.py`), middleware otentikasi Strict Gate JWT HS256 (`@token_required`), hashing kata sandi Bcrypt 12 salt rounds, endpoint auth (`/register`, `/login`, `/me`) selaras spesifikasi OpenAPI 3.0, kontainerisasi multi-layanan `docker-compose.yml`, penyiapan direktori `app/services/`, serta panduan teknis handover `backend-dev-notes.md`.
 * **Repositori `houseprice-mobile-app`:**
   * Status: **Selesai Slicing Fondasi & Re-Slicing Modul Baru**.
   * Progres: Slicing antarmuka awal (Beranda pasar, Form Spesifikasi Properti, Hasil Estimasi, dan Kalkulator KPR) telah selesai diimplementasikan[cite: 8, 9]. Namun, akibat penambahan requirement kritis dari dosen di pertengahan Sprint 1 (*Strict Gate Authentication*, Splash, Onboarding, Landing Page, Notifikasi, dan Profil), dibuka tugas *slicing* antarmuka lanjutan yang ditugaskan khusus kepada **@nurilhuda**[cite: 2, 8].
@@ -40,8 +40,8 @@ Sprint 1 difokuskan untuk menyelesaikan fondasi pada ketiga repositori serta men
 +---------------------------------------------------------------------------------------------------------+
 | [MOB] Slicing Notifikasi & Profil   | [ML]  Eksperimen Komparasi Model        | [DOC] Proposal Baseline |
 |       (@nurilhuda)                  |       (Random Forest vs XGBoost)        | [DOC] Revisi PRD & Specs|
-| [BE]  Setup Docker & DB Schema      | [QA]  Penyusunan Test Case Auth & BVA   | [DES] UI Design Mockup  |
-| [ML]  Export Model Final .pkl       | [BE]  Inisialisasi Blueprint Auth & DB  | [MOB] Init Flutter Repo |
+| [ML]  Export Model Final .pkl       | [QA]  Penyusunan Test Case Auth & BVA   | [DES] UI Design Mockup  |
+| [BE]  Seed Database Master Data     |                                         | [MOB] Init Flutter Repo |
 |                                     |                                         | [MOB] Slicing Beranda   |
 |                                     |                                         | [MOB] Slicing Form ML   |
 |                                     |                                         | [MOB] Slicing KPR Calc  |
@@ -52,6 +52,11 @@ Sprint 1 difokuskan untuk menyelesaikan fondasi pada ketiga repositori serta men
 |                                     |                                         | [MOB] AppBar Login Btn  |
 |                                     |                                         | [MOB] Result HitungUlang|
 |                                     |                                         | [MOB] Auto-Save Riwayat |
+|                                     |                                         | [BE]  Setup Backend Init|
+|                                     |                                         | [BE]  Schema 9 DB & Migr|
+|                                     |                                         | [BE]  Auth JWT OpenApi  |
+|                                     |                                         | [BE]  Docker Multi-Serv |
+|                                     |                                         | [DOC] Handover Tech Doc |
 +---------------------------------------------------------------------------------------------------------+
 ```
 
@@ -95,10 +100,13 @@ Sprint 1 difokuskan untuk menyelesaikan fondasi pada ketiga repositori serta men
   * Memverifikasi eliminasi baris duplikat pada dataset properti latih[cite: 9].
 
 #### C. Trek Backend & Basis Data (Repo: `houseprice-backend-ml`)
-* **Abdul Rahman Hanif Darmawan & Muhammad Nuril Huda:**
-  * Melakukan inisialisasi struktur repositori backend Flask (Blueprint `/api/v1/auth`, `/api/v1/predict`, `/api/v1/notifications`)[cite: 2, 3, 9].
-  * Menyiapkan skrip DDL PostgreSQL untuk membentuk 9 tabel (termasuk tabel baru `users` dan `notifications`)[cite: 1, 2].
-  * Menyiapkan konfigurasi `Dockerfile` dan `docker-compose.yml` untuk deployment di VPS Coolify[cite: 3, 9].
+* **Abdul Rahman Hanif Darmawan (@abdulrahmanhanif) & Muhammad Nuril Huda (@nurilhuda):**
+  * **[TASK-BE-01] Inisialisasi Arsitektur Flask & Blueprint Modular (Selesai):** Setup Application Factory `create_app()` pada `app/__init__.py`, registrasi blueprint `/api/v1/auth`, `/predict`, `/notifications`, dan `/admin`.
+  * **[TASK-BE-02] Skema Basis Data 9 Tabel & Migrasi Alembic (Selesai):** Definisi 9 model PostgreSQL pada `app/models/` dan pembentukan migrasi awal Alembic `e70def023971_create_initial_9_tables.py` lengkap dengan indeks dan batasan integritas data.
+  * **[TASK-BE-03] Implementasi Strict Gate JWT & Kontrak API Auth (Selesai):** Hashing kata sandi Bcrypt 12 rounds, middleware `@token_required`, serta penyelarasan payload rute `/register` (validasi confirm password), `/login` (struktur nested token + user), dan `/me` sesuai `openapi.yaml`.
+  * **[TASK-BE-04] Kontainerisasi Multi-Layanan Docker Compose (Selesai):** Pembaruan `docker-compose.yml` mencakup service `db` (PostgreSQL 15 dengan *healthcheck*) dan `backend` (Flask Gunicorn pada network `houseprice-net`).
+  * **[TASK-BE-05] Penyusunan Dokumen Panduan Teknis & Handover (Selesai):** Pembuatan berkas `docs/tasks/backend-dev-notes.md` sebagai panduan integrasi Sprint 2 untuk seluruh anggota tim.
+  * **[TASK-BE-06] Seeding Database Master Data (To Do):** Menyiapkan skrip seeder untuk mengisi data referensi wilayah DKI Jakarta (`master_locations`), rata-rata pasar (`market_statistics`), dan akun super admin (`admins`).
 
 #### D. Trek Penjaminan Mutu Perangkat Lunak (PMPL)
 * **Nurfinka Lailasari:**

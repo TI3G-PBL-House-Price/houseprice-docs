@@ -44,9 +44,9 @@ Trek Eksperimen ML: `ml-model-testing` | Trek Backend Produksi: `houseprice-back
 | **ML-03** | `ml-model-testing` | Data Cleaning (Missing) | Penanganan nilai kosong (*missing values*) pada atribut `surface_area` dan `building_area`. | M | Sprint 1 | Nurfinka | **In Progress** |
 | **ML-04** | `ml-model-testing` | Preprocessing & Encoding | Pemfilteran *outlier* berbasis batas IQR, One-Hot Encoding fitur wilayah, penskalaan numerik, dan pemisahan train-test (80:20). | M | Sprint 1 | Naufal | **In Progress** |
 | **ML-05** | `ml-model-testing` | Benchmarking & Seleksi Model | Pengujian komparasi model regresi: Random Forest vs Baseline & Gradient Boosting, evaluasi metrik ($R^2 \ge 0,80$), dan ekspor biner `.pkl`. | M | Sprint 1 | Nuril | **In Progress** |
-| **ML-06** | `houseprice-backend-ml` | Setup Backend Skeleton | Inisialisasi struktur repositori Flask, Blueprints rute, dependensi Python, `Dockerfile`, dan `docker-compose.yml`. | M | Sprint 1-2 | Hanif & Nuril | **To Do** |
+| **ML-06** | `houseprice-backend-ml` | Setup Backend Skeleton & Auth | Inisialisasi struktur repositori Flask, Blueprints rute, skema auth JWT Bcrypt selaras OpenAPI 3.0, `Dockerfile`, dan multi-service `docker-compose.yml`. | M | Sprint 1 | Hanif & Nuril | **Done** |
 | **ML-07** | `houseprice-backend-ml` | REST API Inferensi | Implementasi endpoint `POST /api/v1/predict`, `GET /api/v1/market-statistics`, dan `GET /api/v1/locations` menggunakan model `.pkl` terpilih. | M | Sprint 2 | Hanif & Nuril | **To Do** |
-| **ML-08** | `houseprice-backend-ml` | Basis Data PostgreSQL | Migrasi DDL 7 tabel relasional, connection pool, dan pencatatan telemetri `prediction_logs`[cite: 1]. | M | Sprint 2 | Hanif | **To Do** |
+| **ML-08** | `houseprice-backend-ml` | Basis Data PostgreSQL | Migrasi DDL 9 tabel relasional, connection pool, skrip migrasi awal Alembic, dan seeding master data. | M | Sprint 1-2 | Hanif | **In Progress** |
 | **ML-09** | `houseprice-backend-ml` | Web Admin Dashboard | Antarmuka web pengelola: ringkasan metrik model aktif, monitoring volume data, manajemen unggah CSV, dan eksekusi retrain model. | S | Sprint 2 | Nuril & Hanif | **To Do** |
 | **ML-10** | `houseprice-backend-ml` | Cloud Deployment | Penerapan backend dan PostgreSQL ke platform Coolify PaaS dengan sertifikat SSL HTTPS Let's Encrypt. | M | Sprint 2 | Hanif | **To Do** |
 
@@ -69,6 +69,6 @@ Keterlibatan lintas repositori
 ## 5. Alokasi Milestone PBL (Garis Waktu 16 Minggu)
 
 * **Sprint 0 (Minggu 1-4) [SELESAI]:** Penyusunan dan persetujuan proposal produk, perencanaan skema ERD, studi kelayakan dataset, dan pembagian peran tim[cite: 8].
-* **Sprint 1 (Minggu 5-8) [AKTIF]:** Selesainya benchmarking model ML di `ml-model-testing`, inisiasi proyek Flutter & *slicing* UI dasar, pembuatan kerangka awal Flask backend, dan uji BVA form[cite: 8]. *(Milestone 1: Demo Progres Tengah Semester)*[cite: 8]
+* **Sprint 1 (Minggu 5-8) [AKTIF]:** Selesainya benchmarking model ML di `ml-model-testing`, inisiasi proyek Flutter & *slicing* UI dasar, pembuatan kerangka awal Flask backend, migrasi 9 tabel PostgreSQL, auth JWT, dan uji BVA form[cite: 8]. *(Milestone 1: Demo Progres Tengah Semester)*[cite: 8]
 * **Sprint 2 (Minggu 9-12):** Integrasi penuh REST API Flask, database PostgreSQL, fitur KPR & DSR, Cek Kewajaran, penyimpanan riwayat lokal SQLite, dan uji performa API[cite: 8]. *(Milestone 2: Demo Produk Fungsional)*[cite: 8]
 * **Sprint 3 (Minggu 13-16):** Uji coba menyeluruh QA, penutupan bug, penyusunan Software Test Report (STR), deploy cloud Coolify, dan persiapan Expo PBL[cite: 8]. *(Milestone 3: Demo Day Final)*[cite: 8]

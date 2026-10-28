@@ -30,6 +30,7 @@ houseprice-project/
 ├── tasks/
 │   ├── backlog.md                 # Daftar backlog fitur per mata kuliah (Mobile, ML, PMPL)
 │   ├── current-sprint.md          # Sprint berjalan menuju Milestone 1 (Minggu 5 - 8)
+│   ├── backend-dev-notes.md       # Catatan teknis & panduan handover backend Sprint 2
 │   └── completed/
 │       └── sprint-0-proposal.md   # Rekap penyelesaian fase identifikasi & proposal
 │
