@@ -9,7 +9,7 @@
 # 1. Konfigurasi GitHub & CI/CD Pipelines
 /.github/workflows/                 @abdulrahmanhanif
 /.github/CODEOWNERS                 @abdulrahmanhanif
-/.github/pull_request_template.md   @abdulrahmanhanif @nurfinkalailasari
+/.github/pull_request_template.md   @abdulrahmanhanif 
 
 # 2. Dokumentasi Teknis & Manajemen Tugas
 /docs/                              @abdulrahmanhanif
