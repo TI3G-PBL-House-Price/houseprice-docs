@@ -52,22 +52,19 @@ HousePrice menjawab masalah ini dengan menyediakan taksiran harga berbasis bukti
 ## 4. Spesifikasi Fitur Fungsional
 
 ### A. Aplikasi Mobile (Flutter Client)
-- **FR-MOB-01 (Splash & Session Verification):** Memeriksa status pertama kali instalasi dan memvalidasi keberadaan JWT token di *Secure Storage* untuk menentukan navigasi berikutnya (Onboarding, Landing Page, atau Beranda).
-- **FR-MOB-02 (Onboarding Carousel):** Menyajikan 3 kartu geser interaktif yang memaparkan proposisi nilai aplikasi (Estimasi Harga Akurat, Evaluasi Pasar Realistis, Simulasi KPR Cepat) dilengkapi opsi lewati (*Skip*) dan tombol aksi selesai.
-- **FR-MOB-03 (Landing Page):** Halaman pembuka sebelum otentikasi yang menyediakan opsi navigasi terarah menuju form pendaftaran akun atau form masuk akun.
-- **FR-MOB-04 (Autentikasi Akun - Strict Gate):**
-  - **Pendaftaran (Register):** Validasi format email, kelengkapan nama, dan konfirmasi kata sandi minimal 8 karakter.
-  - **Masuk Akun (Login):** Autentikasi email dan kata sandi, penerimaan token JWT, serta penyimpanan sesi terenkripsi.
+- **FR-MOB-01 (Splash & Session Verification):** Memeriksa status instalasi dan sesi login; berpindah otomatis setelah timer 3 detik menuju Carousel Onboarding tanpa tombol masuk manual.
+- **FR-MOB-02 (Onboarding Carousel):** Menyajikan 3 kartu geser interaktif proposisi nilai aplikasi (Estimasi Harga Akurat, Evaluasi Pasar Realistis, Simulasi KPR Cepat) dilengkapi opsi lewati (*Skip*) dan tombol aksi selesai.
+- **FR-MOB-03 (Landing Page):** Halaman pembuka informasi publik yang dapat diakses tanpa login, mempertahankan menu navigasi bawah (Beranda, Estimasi, KPR) serta tombol **"Masuk"** di AppBar pojok kanan atas di samping ikon riwayat.
+- **FR-MOB-04 (Autentikasi Akun - Gate):**
+  - **Pendaftaran (Register):** Validasi format email, kelengkapan nama, dan kata sandi minimal 8 karakter; tersimpan di sesi lokal tanpa bergantung data dummy.
+  - **Masuk Akun (Login):** Autentikasi email dan kata sandi, penerimaan token/sesi, serta penyimpanan sesi terenkripsi.
 - **FR-MOB-05 (Beranda Tren Pasar):** Menyajikan statistik agregasi rata-rata harga per meter persegi ($m^2$) berdasarkan penyaringan kota administrasi di DKI Jakarta.
-- **FR-MOB-06 (Form Prediksi ML):** Formulir masukan parameter fisik properti: Kota (Dropdown), Kecamatan (Dropdown dinamis dari master data), Luas Tanah ($m^2$), Luas Bangunan ($m^2$), Jumlah Kamar Tidur, Kamar Mandi, dan Carport. Validasi lokal mencegah masukan kosong, nol, atau bernilai negatif.
-- **FR-MOB-07 (Hasil Prediksi & Estimasi Nilai Pasar):** Menampilkan nilai taksiran pasar properti dalam nominal Rupiah beserta rentang batas deviasi wajar (*Lower* dan *Upper Bound*).
-- **FR-MOB-08 (Cek Kewajaran Harga):** Mengomparasikan nominal penawaran aktual penjual dengan estimasi model ML, menampilkan evaluasi status:
-  - *Murah / Dibawah Pasar:* Selisih penawaran < -10% terhadap prediksi.
-  - *Wajar / Sesuai Pasar:* Selisih penawaran berada di antara rentang -10% s/d +10%.
-  - *Mahal / Diatas Pasar:* Selisih penawaran > +10% terhadap prediksi.
-- **FR-MOB-09 (Kalkulator Simulasi KPR):** Menghitung proyeksi angsuran pinjaman bulanan berbasis metode anuitas dengan parameter: harga properti, persentase uang muka (DP), suku bunga tetap tahunan, dan tenor cicilan (tahun).
+- **FR-MOB-06 (Form Prediksi ML):** Formulir masukan parameter fisik properti: Kota (Dropdown), Kecamatan (Dropdown dinamis), Luas Tanah ($m^2$), Luas Bangunan ($m^2$), Kamar Tidur, Kamar Mandi, dan Carport. Saat disubmit, data kalkulasi otomatis tercatat ke riwayat pengguna.
+- **FR-MOB-07 (Hasil Prediksi & Estimasi Nilai Pasar):** Menampilkan nilai taksiran pasar properti dalam nominal Rupiah, rentang batas deviasi wajar, ringkasan spesifikasi, dan tombol aksi tunggal **"Hitung Ulang"** (tombol simpan dan bagikan ditiadakan karena riwayat tersimpan otomatis).
+- **FR-MOB-08 (Cek Kewajaran Harga):** Mengomparasikan nominal penawaran aktual penjual dengan estimasi model ML, menampilkan evaluasi status (*Murah, Wajar, Mahal* deviasi $\pm 10\%$).
+- **FR-MOB-09 (Kalkulator Simulasi KPR):** Menghitung proyeksi angsuran bulanan (bunga anuitas), rasio DSR OJK $\le 40\%$, otomatisasi pencatatan ke riwayat saat tombol hitung ditekan, dan tombol aksi tunggal **"Hitung Ulang"** pada layar hasil.
 - **FR-MOB-10 (Pusat Notifikasi):** Menampilkan daftar pemberitahuan tren harga pasar terbaru dan rilis sistem, disertai pembaruan status baca saat pesan dibuka.
-- **FR-MOB-11 (Profil Pengguna & Riwayat Cloud):** Menampilkan identitas akun yang sedang aktif, daftar riwayat pencarian prediksi yang terikat pada `user_id` di server, fasilitas penggantian kata sandi, dan fungsi *Logout* yang menghapus token lokal.
+- **FR-MOB-11 (Profil Pengguna & Riwayat Kalkulasi):** Menampilkan identitas akun yang sedang aktif, fasilitas penggantian kata sandi, fungsi *Logout*, serta riwayat kalkulasi yang otomatis tercatat dan wajib login untuk membukanya.
 
 ### B. Web Dashboard Admin (Flask Web Interface)
 - **FR-WEB-01 (Autentikasi Admin):** Login sesi aman khusus akun administrator yang terverifikasi pada tabel `admins`.

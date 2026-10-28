@@ -99,13 +99,13 @@ Menata susunan komponen hasil inferensi model ML dan evaluasi kelayakan harga pe
 
 ```
 +-------------------------------------------------------------+
-| [<-] Hasil Valuasi Properti                 [Ikon Notif]    |
+| [<-] Hasil Valuasi Properti         [Riwayat] [Masuk (Tamu)]|
 +-------------------------------------------------------------+
 | CARD 1: ESTIMASI NILAI PASAR (HASIL MACHINE LEARNING)       |
 | Rentang Harga Pasar Wajar:                                  |
 | Rp 2,45 M  sampai  Rp 2,80 M                                |
 | Harga Rata-Rata Bangunan: Rp 18,5 Jt / m2                   |
-| Status Pencatatan: [ Tersimpan di Riwayat Cloud ]           |
+| Status Pencatatan: [ Otomatis Tersimpan di Riwayat ]        |
 +-------------------------------------------------------------+
 | CARD 2: CEK KEWAJARAN HARGA PENAWARAN                       |
 | "Masukkan harga penawaran penjual untuk evaluasi"           |
@@ -118,12 +118,22 @@ Menata susunan komponen hasil inferensi model ML dan evaluasi kelayakan harga pe
 | Luas Tanah: 140 m2           | Luas Bangunan: 120 m2        |
 | Kamar Tidur: 3               | Kamar Mandi: 2               |
 +-------------------------------------------------------------+
-| [ Tombol Putih: Hitung Ulang ]  [ Tombol Putih: Ke KPR ]    |
-| [ TOMBOL GRADASI NAVY-BLUE: Bagikan Estimasi Nilai ]        |
+| [ TOMBOL GRADASI NAVY-BLUE: Hitung Ulang ]                  |
 +-------------------------------------------------------------+
 ```
+*(Catatan: Tombol "Simpan" dan "Bagikan Estimasi Nilai" telah dihapus; sistem otomatis menyimpan setiap perhitungan ke riwayat kalkulasi pengguna saat tombol kalkulasi/prediksi ditekan).*
 
-### C. Layar Notifikasi & Profil Pengguna
+### C. Layar Hasil Simulasi KPR (`kpr_result_screen.dart`)
+* **Hero Angsuran:** Kartu gelap Navy dengan estimasi cicilan per bulan (`Rp 8.420.000 / bulan`).
+* **Komposisi Angsuran:** Visualisasi bar proporsi pokok (66,2%) vs bunga (33,8%) serta rincian total beban pembiayaan.
+* **Evaluasi DSR:** Kartu kapasitas bayar dengan rasio Debt Service Ratio dan lencana status Ideal ($\le 40\%$).
+* **Tombol Aksi Utama:** Tombol tunggal **"Hitung Ulang"** (`GradientButton`) dengan ikon `Icons.refresh_rounded` untuk kembali ke formulir kalkulator.
+
+### D. Akses Riwayat Kalkulasi & Proteksi Autentikasi (`history_bottom_sheet.dart`)
+* **Penyimpanan Otomatis (*Auto-Save*):** Setiap kali formulir prediksi atau simulasi KPR disubmit, data perhitungan otomatis dicatat ke riwayat teratas (`addRecord`) tanpa perlu tombol simpan manual.
+* **Proteksi Autentikasi (*Auth Guard*):** Pengguna wajib terautentikasi (login) untuk membuka riwayat. Jika pengguna anonim/tamu menekan ikon riwayat, sistem menampilkan SnackBar edukatif 2 detik dan mengarahkan pengguna ke halaman Login.
+
+### E. Layar Notifikasi & Profil Pengguna
 1. **Layar Notifikasi (`notification_screen.dart`):**
    * *List Tile Notifikasi:* Kartu putih berlatar belakang biru lembut jika pesan belum dibaca (`#EFF6FF`), dan berlatar putih penuh jika sudah dibaca[cite: 8].
    * Informasi memuat ikon kategori, judul notifikasi (SemiBold 14sp), deskripsi pesan (Regular 13sp), serta stempel waktu (Caption 11sp)[cite: 8].

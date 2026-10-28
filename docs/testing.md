@@ -86,6 +86,11 @@ Pengujian ini memastikan tidak ada celah bagi pengguna anonim untuk mengakses fi
 | **TC-NAV-06** | Sesi Aktif (*Authenticated*) | Menutup & membuka kembali aplikasi | Splash screen mendeteksi token valid di secure storage $\rightarrow$ *bypass* landing page $\rightarrow$ langsung ke Beranda. |
 | **TC-NAV-07** | Token Kedaluwarsa (*Expired*) | Membuka fitur prediksi setelah token expired | API mengembalikan 401 $\rightarrow$ `AuthInterceptor` menghapus token lokal $\rightarrow$ redirect paksa ke `LandingScreen` disertai notifikasi "Sesi telah berakhir". |
 | **TC-NAV-08** | Aksi Logout | Memilih opsi "Keluar" pada menu Profil | Dialog konfirmasi muncul $\rightarrow$ token dihapus dari secure storage $\rightarrow$ navigasi kembali ke `LandingScreen`. |
+| **TC-NAV-09** | Riwayat (Belum Login) | Menekan ikon Riwayat di AppBar saat belum terautentikasi | Menampilkan SnackBar edukatif 2 detik dan langsung mengarahkan ke `LoginScreen`. |
+| **TC-NAV-10** | Tombol Masuk AppBar | Pengguna belum login melihat AppBar Beranda/Hasil | Tombol aksi "Masuk" tampil di samping ikon riwayat; saat ditekan membuka `LoginScreen`. |
+| **TC-UI-01**  | Layar Hasil Prediksi | Membuka Layar Hasil Prediksi Properti | Hanya menampilkan tombol tunggal **"Hitung Ulang"** (`GradientButton`); tombol *Simpan* dan *Bagikan* tidak ada. |
+| **TC-UI-02**  | Layar Hasil KPR | Membuka Layar Hasil Simulasi KPR | Hanya menampilkan tombol tunggal **"Hitung Ulang"** (`GradientButton`); tombol *Simpan Hasil Simulasi ke Riwayat* tidak ada. |
+| **TC-LOG-09** | Auto-Save Riwayat | Menekan tombol "Prediksi Harga" / "Hitung Simulasi KPR" | Sistem otomatis mencatat hasil kalkulasi ke riwayat teratas tanpa memerlukan aksi simpan manual. |
 
 ---
 

@@ -6,6 +6,26 @@ Seluruh pembaruan penting pada proyek HousePrice dicatat dalam berkas ini. Forma
 
 ## [Unreleased]
 
+### Diubah & Diperbarui (Changed - Mobile App Sprint 1 Refinement)
+- **Penyederhanaan Tombol Aksi Hasil Prediksi Harga Properti (`ResultPage`):**
+  - Menghapus tombol **"Simpan"** dan tombol **"Bagikan Estimasi Nilai"**.
+  - Menggantikannya dengan tombol aksi tunggal **"Hitung Ulang"** (`GradientButton` dengan ikon `Icons.refresh_rounded`) yang mengembalikan pengguna ke formulir input spesifikasi properti.
+- **Penyederhanaan Tombol Aksi Hasil Simulasi KPR (`KprResultPage`):**
+  - Menghapus tombol **"Simpan Hasil Simulasi ke Riwayat"**.
+  - Menggantikannya dengan tombol aksi tunggal **"Hitung Ulang"** (`GradientButton` dengan ikon `Icons.refresh_rounded`) yang mengembalikan pengguna ke formulir kalkulator KPR.
+- **Otomatisasi Penyimpanan Riwayat Perhitungan:**
+  - Menambahkan method `HistoryBottomSheet.addRecord(...)` untuk otomatis menyimpan riwayat kalkulasi di urutan teratas tanpa memerlukan tombol simpan manual.
+  - Form Prediksi (`PredictFormPage`) otomatis mencatat hasil estimasi nilai dan nama lokasi ke riwayat saat pengguna menekan tombol "Prediksi Harga".
+  - Form KPR (`KprFormPage`) otomatis mencatat nominal angsuran per bulan dan tenor pinjaman ke riwayat saat pengguna menekan tombol "Hitung Simulasi KPR".
+- **Pembaruan Alur Navigasi & Proteksi Akses Riwayat:**
+  - Tombol **"Masuk"** ditambahkan di AppBar pojok kanan atas berdampingan dengan ikon riwayat pada `HomePage` dan `ResultPage` khusus bagi pengguna yang belum terautentikasi.
+  - Akses riwayat kalkulasi (`HistoryBottomSheet.show`) kini wajib login terlebih dahulu; pengguna yang belum login akan dialihkan ke halaman login disertai pesan SnackBar edukatif.
+  - Transisi Splash Screen diperbarui menjadi otomatis berpindah setelah timer 3 detik menuju Carousel Onboarding tanpa tombol masuk manual.
+- **Penguatan Pengujian Otomatis (QA):**
+  - Menambahkan pengujian widget untuk memastikan tombol "Hitung Ulang" tampil dan tombol "Simpan"/"Bagikan" tidak lagi muncul di layar hasil.
+  - Menambahkan pengujian otomatisasi pencatatan riwayat kalkulasi lokal.
+  - Seluruh 16 unit & widget tests dan analisis statis `flutter analyze` berhasil lulus 100%.
+
 ### Ditambahkan (Added - Mobile App Sprint 1)
 - **Struktur Fondasi Clean Architecture:**
   - Setup folder arsitektur `lib/core/` (constants: `app_colors.dart`, `app_sizes.dart`, `app_typography.dart`; theme: `app_theme.dart`) dan `lib/features/` berorientasi fitur presentation (`pages/` dan `widgets/`).
@@ -13,7 +33,7 @@ Seluruh pembaruan penting pada proyek HousePrice dicatat dalam berkas ini. Forma
 - **Slicing Antarmuka & Validasi UI (UI Mockup):**
   - **Beranda (Home):** Header salam dinamis, kartu ringkasan pasar properti DKI Jakarta, tombol aksi cepat (Mulai Prediksi, Simulasi KPR, Cek Kewajaran, Riwayat), dan kartu rekomendasi properti.
   - **Form Prediksi Properti:** Form 7 parameter spesifikasi rumah lengkap dengan validasi lokal (luas tanah min. 30 m², luas bangunan, kamar tidur, kamar mandi, carport, dropdown wilayah kota administratif & kecamatan).
-  - **Hasil Estimasi Properti:** Kartu nominal estimasi harga (Rp), rentang pasar wajar toleransi $\pm 10\%$, ringkasan spesifikasi, input evaluasi kewajaran harga penawaran penjual, dan tombol aksi simpan/bagikan.
+  - **Hasil Estimasi Properti:** Kartu nominal estimasi harga (Rp), rentang pasar wajar toleransi $\pm 10\%$, ringkasan spesifikasi, input evaluasi kewajaran harga penawaran penjual, dan tombol aksi "Hitung Ulang".
   - **Riwayat & Favorit:** Antarmuka daftar riwayat kalkulasi estimasi offline dan daftar properti tersimpan dengan kartu informasi interaktif.
   - **Pengaturan:** Halaman konfigurasi profil, preferensi notifikasi, mode gelap/terang, dan informasi pengembang PBL.
 
