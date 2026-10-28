@@ -4,7 +4,7 @@
 # ==============================================================================
 
 # Aturan Default (Fallback: Project Manager & QA Lead meninjau perubahan global)
-* @abdulrahmanhanif @nurfinkalailasari
+* @abdulrahmanhanif	
 
 # 1. Konfigurasi GitHub & CI/CD Pipelines
 /.github/workflows/                 @abdulrahmanhanif
