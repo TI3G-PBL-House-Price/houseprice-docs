@@ -35,6 +35,12 @@ Seluruh pembaruan penting pada proyek HousePrice dicatat dalam berkas ini. Forma
 - **Otomasi Pengujian Mutu (PMPL Pytest Test Suite):**
   - Pembuatan direktori `tests/` memuat fixture `conftest.py`, `test_market_api.py`, dan `test_auth_api.py`.
   - Seluruh 7 pengujian otomatis integrasi API (locations, market stats, register, login, me, invalid auth) berhasil lulus 100% (*7 passed in 2.65s*).
+- **Implementasi ML Service Layer & Prediction API (`/api/v1/predict` - PR #3 Merged):**
+  - Modul `app/services/ml_service.py` untuk pemuatan artefak Scikit-Learn (`models_artefacts/model.pkl`) dengan *memory caching* dan *smart heuristic fallback* berbasis rata-rata harga pasar riil DKI Jakarta.
+  - Perhitungan otomatis rentang batas toleransi kewajaran harga ($\pm 10\%$) serta pengukuran latensi eksekusi komputasi server ($< 1.500$ ms).
+  - Endpoint `POST /api/v1/predict` (Strict Gate JWT) dengan validasi skema masukan fisik properti (`surface_area >= 1`, `building_area >= 1`, `bed >= 0`, `bath >= 0`, `carport >= 0`), penolakan `400 INVALID_INPUT_SCHEMA` dengan rincian `details`, serta pencatatan otomatis ke tabel `prediction_logs` yang terikat ke akun pengguna.
+  - Endpoint `GET /api/v1/predict/history` (Strict Gate JWT) untuk menyajikan riwayat kalkulasi pengguna aktif dengan isolasi data antarakun dan dukungan paginasi parameter `limit` dan `offset`.
+  - Penambahan 5 skenario uji otomatis pada `tests/test_predict_api.py`, meningkatkan cakupan pengujian Pytest menjadi 12 test cases dengan tingkat kelulusan 100% (*12 passed in 8.67s*).
 - **Orkestrasi Kontainerisasi & Panduan Handover:**
   - Konfigurasi multi-layanan `docker-compose.yml` (`db` PostgreSQL 15 Alpine dengan *healthcheck* dan `backend` Flask Gunicorn pada jaringan `houseprice-net`).
   - Penyiapan direktori paket `app/services/` sebagai kerangka layer logika bisnis dan ML runtime.
