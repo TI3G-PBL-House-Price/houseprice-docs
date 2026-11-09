@@ -48,6 +48,12 @@ Seluruh pembaruan penting pada proyek HousePrice dicatat dalam berkas ini. Forma
   - Endpoint `GET /api/v1/notifications` (Strict Gate JWT) untuk memuat daftar notifikasi pengguna dengan kalkulasi dinamis jumlah pesan belum dibaca (`unread_count`).
   - Endpoint `PATCH /api/v1/notifications/<id>/read` (Strict Gate JWT) untuk menandai notifikasi telah dibaca dengan penjagaan akses kepemilikan data (404 jika bukan milik pengguna aktif).
   - Penambahan 6 skenario uji otomatis baru pada `tests/test_notifications_and_profile_api.py`, menghasilkan total 18 skenario uji Pytest lulus 100% (*18 passed in 22.54s*).
+- **Implementasi Manajemen Dataset CSV Web Admin (FR-WEB-03):**
+  - Formulir unggah berkas CSV (`/admin/dataset/upload`) dengan opsi rasio pemisahan *train-test split* (80:20, 70:30, 85:15).
+  - Validasi format berkas `.csv`, penyimpanan ke direktori terisolasi `uploads/datasets/`, serta kalkulasi otomatis `total_records` dan `file_size_bytes` ke tabel `dataset_metadata`.
+  - Pencatatan jejak audit aktivitas ke `system_audit_logs` (`DATASET_UPLOAD` - FR-WEB-05).
+  - Integrasi tab kelima (*Dataset Manager*) pada Web Admin Dashboard yang menyajikan ringkasan metadata dataset aktif dan pratinjau struktur data tabular (10 baris pertama).
+  - Penambahan 4 skenario uji otomatis pada `tests/test_admin_dataset.py`, meningkatkan total cakupan pengujian Pytest menjadi 22 test cases dengan tingkat kelulusan 100% (*22 passed in 24.16s*).
 - **Orkestrasi Kontainerisasi & Panduan Handover:**
   - Konfigurasi multi-layanan `docker-compose.yml` (`db` PostgreSQL 15 Alpine dengan *healthcheck* dan `backend` Flask Gunicorn pada jaringan `houseprice-net`).
   - Penyiapan direktori paket `app/services/` sebagai kerangka layer logika bisnis dan ML runtime.

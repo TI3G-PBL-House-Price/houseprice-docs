@@ -47,7 +47,7 @@ Trek Eksperimen ML: `ml-model-testing` | Trek Backend Produksi: `houseprice-back
 | **ML-06** | `houseprice-backend-ml` | Setup Backend Skeleton & Auth | Inisialisasi struktur repositori Flask, Blueprints rute, skema auth JWT Bcrypt selaras OpenAPI 3.0, `Dockerfile`, dan multi-service `docker-compose.yml`. | M | Sprint 1 | Hanif | **Done** |
 | **ML-07** | `houseprice-backend-ml` | REST API Inferensi & Master Data | Implementasi endpoint `POST /api/v1/predict`, `GET /api/v1/predict/history`, `GET /api/v1/market-statistics`, dan `GET /api/v1/locations` lengkap dengan layer `MLService`. | M | Sprint 2 | Hanif (API) & Nuril (Model `.pkl`) | **Done** |
 | **ML-08** | `houseprice-backend-ml` | Basis Data PostgreSQL | Migrasi DDL 9 tabel relasional, connection pool, skrip migrasi awal Alembic, dan seeding 9 tabel master & dummy data. | M | Sprint 1-2 | Hanif | **Done** |
-| **ML-09** | `houseprice-backend-ml` | Web Admin Dashboard | Antarmuka web pengelola: ringkasan metrik model aktif, monitoring volume data, live inference workbench, registri model, dan audit trail terotentikasi sesi. | S | Sprint 2 | Hanif | **Done (Core Dashboard & Auth)** |
+| **ML-09** | `houseprice-backend-ml` | Web Admin Dashboard | Antarmuka web pengelola: ringkasan metrik model aktif, monitoring volume data, live inference workbench, registri model, audit trail, dan manajemen unggah dataset CSV (FR-WEB-03). | S | Sprint 2 | Hanif | **Done (Dashboard, Auth & CSV Manager)** |
 | **ML-10** | `houseprice-backend-ml` | Cloud Deployment | Penerapan backend dan PostgreSQL ke platform Coolify PaaS dengan sertifikat SSL HTTPS Let's Encrypt. | M | Sprint 2 | Hanif | **To Do** |
 
 ---
@@ -60,7 +60,7 @@ Keterlibatan lintas repositori
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **QA-01** | Uji Form Blackbox | Perancangan skenario uji dan eksekusi BVA (luas tanah min. 30 m²) serta EP pada form input properti mobile. | M | Sprint 1 | Jasmine | **To Do** |
 | **QA-02** | Uji Logika Bisnis | Verifikasi matematis kalkulasi bunga anuitas KPR, evaluasi rasio DSR OJK $\le 40\%$, dan formula deviasi kewajaran harga ($\pm 10\%$). | M | Sprint 2 | Naufal | **To Do** |
-| **QA-03** | Uji Integrasi & Latensi API | Pengujian otomatisasi endpoint backend via Pytest test suite (`test_notifications_and_profile_api.py`, `test_predict_api.py`, `test_market_api.py`, `test_auth_api.py`) dengan 18 test cases 100% lulus, dan pengujian inferensi model latensi $< 1,5$ detik. | M | Sprint 2 | Hanif & Nurfinka | **Done (18 Test Cases Lulus 100%)** |
+| **QA-03** | Uji Integrasi & Latensi API | Pengujian otomatisasi endpoint backend via Pytest test suite (`test_admin_dataset.py`, `test_notifications_and_profile_api.py`, `test_predict_api.py`, `test_market_api.py`, `test_auth_api.py`) dengan 22 test cases 100% lulus, dan pengujian inferensi model latensi $< 1,5$ detik. | M | Sprint 2 | Hanif & Nurfinka | **Done (22 Test Cases Lulus 100%)** |
 | **QA-04** | Uji Pengalaman Pengguna | Pengujian Usability dan responsivitas layout visual pada perangkat fisik Android (bebas galat *overflow*). | M | Sprint 3 | Nuril | **To Do** |
 | **QA-05** | Defect Management & STR | Setup lembar pelacakan cacat (*Defect Tracking Log*) dan penyusunan laporan formal *Software Test Report* (STR). | M | Sprint 1-3 | Nurfinka | **In Progress** |
 

@@ -41,7 +41,7 @@ Sprint 1 difokuskan untuk menyelesaikan fondasi pada ketiga repositori serta men
 | [MOB] Slicing Notifikasi & Profil   | [ML]  Eksperimen Komparasi Model        | [DOC] Proposal Baseline |
 |       (@nurilhuda)                  |       (Random Forest vs XGBoost)        | [DOC] Revisi PRD & Specs|
 | [ML]  Export Model Final .pkl       | [QA]  Penyusunan Test Case Auth & BVA   | [DES] UI Design Mockup  |
-|                                     | [BE]  Web Admin CSV Dataset Manager     | [MOB] Init Flutter Repo |
+|                                     |                                         | [MOB] Init Flutter Repo |
 |                                     |                                         | [MOB] Slicing Beranda   |
 |                                     |                                         | [MOB] Slicing Form ML   |
 |                                     |                                         | [MOB] Slicing KPR Calc  |
@@ -62,6 +62,7 @@ Sprint 1 difokuskan untuk menyelesaikan fondasi pada ketiga repositori serta men
 |                                     |                                         | [BE]  ML Service&Predict|
 |                                     |                                         | [BE]  Profile & FCM API |
 |                                     |                                         | [BE]  In-App Notif API  |
+|                                     |                                         | [BE]  Admin CSV Manager |
 |                                     |                                         | [QA]  API Pytest Suite  |
 |                                     |                                         | [DOC] Handover Tech Doc |
 +---------------------------------------------------------------------------------------------------------+
@@ -118,11 +119,11 @@ Sprint 1 difokuskan untuk menyelesaikan fondasi pada ketiga repositori serta men
   * **[TASK-BE-08] API Master Lokasi & Statistik Pasar (Selesai):** Implementasi endpoint publik `GET /api/v1/locations` (data 46 kecamatan dikelompokkan per 5 kota) dan `GET /api/v1/market-statistics` (rata-rata harga/m² dengan filter query `city` dan `district`) selaras OpenAPI 3.0.
   * **[TASK-BE-09] ML Service Layer & Predict API (Selesai - PR #3 Merged):** Abstraksi `app/services/ml_service.py` untuk pemuatan model `.pkl`, kalkulasi toleransi wajar $\pm 10\%$, dan endpoint `POST /api/v1/predict` serta `GET /api/v1/predict/history`.
   * **[TASK-BE-10] User Profile & In-App Notifications API (Selesai):** Rute `PUT /api/v1/auth/profile`, `POST /api/v1/auth/fcm-token`, `POST /api/v1/auth/logout`, `GET /api/v1/notifications`, dan `PATCH /api/v1/notifications/<id>/read` lengkap dengan isolasi data antarakun dan perhitungan `unread_count`.
-  * **[TASK-BE-11] Web Admin CSV Dataset Management (Sedang Dikerjakan):** Modul unggah berkas CSV properti `jakarta_house_v1.csv`, kalkulasi metadata, dan pratinjau tabel tabular.
+  * **[TASK-BE-11] Web Admin CSV Dataset Management (Selesai):** Modul unggah berkas CSV properti `jakarta_house_v1.csv`, kalkulasi metadata (`total_records` & `file_size_bytes`), pencatatan audit log (`DATASET_UPLOAD`), dan tab kelima dashboard dengan pratinjau tabel tabular 10 baris.
 
 #### D. Trek Penjaminan Mutu Perangkat Lunak (PMPL)
 * **Nurfinka Lailasari & Abdul Rahman Hanif Darmawan:**
-  * **[TASK-QA-01] Otomasi Pengujian Integrasi API (Selesai):** Penyiapan framework Pytest pada direktori `tests/` (`test_notifications_and_profile_api.py`, `test_predict_api.py`, `test_market_api.py`, dan `test_auth_api.py`) dengan 18 test cases otomatis yang lulus 100%.
+  * **[TASK-QA-01] Otomasi Pengujian Integrasi API & Web (Selesai):** Penyiapan framework Pytest pada direktori `tests/` (`test_admin_dataset.py`, `test_notifications_and_profile_api.py`, `test_predict_api.py`, `test_market_api.py`, dan `test_auth_api.py`) dengan 22 test cases otomatis yang lulus 100%.
   * **[TASK-QA-02] Matriks Pelacakan Cacat (In Progress):** Setup *Defect Tracking Log* untuk mendokumentasikan kendala integrasi mobile-backend.
 * **Jasmine Nasywa Nabilah:**
   * Menyusun tabel skenario uji Blackbox (BVA dan EP) untuk formulir registrasi, formulir login, dan validasi form properti[cite: 7, 9].
