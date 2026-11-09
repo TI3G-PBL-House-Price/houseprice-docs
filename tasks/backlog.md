@@ -60,7 +60,7 @@ Keterlibatan lintas repositori
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **QA-01** | Uji Form Blackbox | Perancangan skenario uji dan eksekusi BVA (luas tanah min. 30 m²) serta EP pada form input properti mobile. | M | Sprint 1 | Jasmine | **To Do** |
 | **QA-02** | Uji Logika Bisnis | Verifikasi matematis kalkulasi bunga anuitas KPR, evaluasi rasio DSR OJK $\le 40\%$, dan formula deviasi kewajaran harga ($\pm 10\%$). | M | Sprint 2 | Naufal | **To Do** |
-| **QA-03** | Uji Integrasi & Latensi API | Pengujian otomatisasi endpoint backend via Pytest test suite (`test_admin_dataset.py`, `test_notifications_and_profile_api.py`, `test_predict_api.py`, `test_market_api.py`, `test_auth_api.py`) dengan 22 test cases 100% lulus, dan pengujian inferensi model latensi $< 1,5$ detik. | M | Sprint 2 | Hanif & Nurfinka | **Done (22 Test Cases Lulus 100%)** |
+| **QA-03** | Uji Integrasi & Latensi API | Pengujian otomatisasi endpoint backend via Pytest test suite (`test_admin_dataset.py`, `test_notifications_and_profile_api.py`, `test_predict_api.py`, `test_market_api.py`, `test_auth_api.py`) dengan 23 test cases 100% lulus, dan pengujian inferensi model latensi $< 1,5$ detik. | M | Sprint 2 | Hanif & Nurfinka | **Done (23 Test Cases Lulus 100%)** |
 | **QA-04** | Uji Pengalaman Pengguna | Pengujian Usability dan responsivitas layout visual pada perangkat fisik Android (bebas galat *overflow*). | M | Sprint 3 | Nuril | **To Do** |
 | **QA-05** | Defect Management & STR | Setup lembar pelacakan cacat (*Defect Tracking Log*) dan penyusunan laporan formal *Software Test Report* (STR). | M | Sprint 1-3 | Nurfinka | **In Progress** |
 

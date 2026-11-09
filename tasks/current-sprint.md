@@ -123,7 +123,7 @@ Sprint 1 difokuskan untuk menyelesaikan fondasi pada ketiga repositori serta men
 
 #### D. Trek Penjaminan Mutu Perangkat Lunak (PMPL)
 * **Nurfinka Lailasari & Abdul Rahman Hanif Darmawan:**
-  * **[TASK-QA-01] Otomasi Pengujian Integrasi API & Web (Selesai):** Penyiapan framework Pytest pada direktori `tests/` (`test_admin_dataset.py`, `test_notifications_and_profile_api.py`, `test_predict_api.py`, `test_market_api.py`, dan `test_auth_api.py`) dengan 22 test cases otomatis yang lulus 100%.
+  * **[TASK-QA-01] Otomasi Pengujian Integrasi API & Web (Selesai):** Penyiapan framework Pytest pada direktori `tests/` (`test_admin_dataset.py`, `test_notifications_and_profile_api.py`, `test_predict_api.py`, `test_market_api.py`, dan `test_auth_api.py`) dengan 23 test cases otomatis yang lulus 100%.
   * **[TASK-QA-02] Matriks Pelacakan Cacat (In Progress):** Setup *Defect Tracking Log* untuk mendokumentasikan kendala integrasi mobile-backend.
 * **Jasmine Nasywa Nabilah:**
   * Menyusun tabel skenario uji Blackbox (BVA dan EP) untuk formulir registrasi, formulir login, dan validasi form properti[cite: 7, 9].

@@ -54,6 +54,10 @@ Seluruh pembaruan penting pada proyek HousePrice dicatat dalam berkas ini. Forma
   - Pencatatan jejak audit aktivitas ke `system_audit_logs` (`DATASET_UPLOAD` - FR-WEB-05).
   - Integrasi tab kelima (*Dataset Manager*) pada Web Admin Dashboard yang menyajikan ringkasan metadata dataset aktif dan pratinjau struktur data tabular (10 baris pertama).
   - Penambahan 4 skenario uji otomatis pada `tests/test_admin_dataset.py`, meningkatkan total cakupan pengujian Pytest menjadi 22 test cases dengan tingkat kelulusan 100% (*22 passed in 24.16s*).
+- **Observabilitas Kesehatan Sistem & Keselarasan Kontrak Retrain (PR #6 Merged):**
+  - Penambahan *active database healthcheck heartbeat query* (`SELECT 1`) pada rute `/health` sesuai standar `docs/observability.md`.
+  - Penyelarasan endpoint `/admin/retrain` agar mengembalikan kode status HTTP `202 Accepted` saat diakses via klien API selaras spesifikasi `openapi.yaml`.
+  - Penambahan skenario uji `test_health_check_endpoint` pada `tests/test_auth_api.py`, menghasilkan total 23 pengujian Pytest lulus 100% (*23 passed in 19.21s*).
 - **Orkestrasi Kontainerisasi & Panduan Handover:**
   - Konfigurasi multi-layanan `docker-compose.yml` (`db` PostgreSQL 15 Alpine dengan *healthcheck* dan `backend` Flask Gunicorn pada jaringan `houseprice-net`).
   - Penyiapan direktori paket `app/services/` sebagai kerangka layer logika bisnis dan ML runtime.
