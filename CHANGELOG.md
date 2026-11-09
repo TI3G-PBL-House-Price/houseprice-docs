@@ -41,6 +41,13 @@ Seluruh pembaruan penting pada proyek HousePrice dicatat dalam berkas ini. Forma
   - Endpoint `POST /api/v1/predict` (Strict Gate JWT) dengan validasi skema masukan fisik properti (`surface_area >= 1`, `building_area >= 1`, `bed >= 0`, `bath >= 0`, `carport >= 0`), penolakan `400 INVALID_INPUT_SCHEMA` dengan rincian `details`, serta pencatatan otomatis ke tabel `prediction_logs` yang terikat ke akun pengguna.
   - Endpoint `GET /api/v1/predict/history` (Strict Gate JWT) untuk menyajikan riwayat kalkulasi pengguna aktif dengan isolasi data antarakun dan dukungan paginasi parameter `limit` dan `offset`.
   - Penambahan 5 skenario uji otomatis pada `tests/test_predict_api.py`, meningkatkan cakupan pengujian Pytest menjadi 12 test cases dengan tingkat kelulusan 100% (*12 passed in 8.67s*).
+- **Implementasi Profil Pengguna, FCM Token, Logout & In-App Notifications API:**
+  - Endpoint `PUT /api/v1/auth/profile` (Strict Gate JWT) untuk pembaruan profil nama, kontak telepon, dan alur penggantian kata sandi dengan verifikasi hash sandi lama serta syarat kekuatan sandi baru (min 8 karakter).
+  - Endpoint `POST /api/v1/auth/fcm-token` (Strict Gate JWT) untuk sinkronisasi token Firebase Cloud Messaging milik perangkat pengguna ke kolom `users.fcm_token`.
+  - Endpoint `POST /api/v1/auth/logout` (Strict Gate JWT) untuk terminasi sesi aplikasi mobile dan pengosongan `fcm_token`.
+  - Endpoint `GET /api/v1/notifications` (Strict Gate JWT) untuk memuat daftar notifikasi pengguna dengan kalkulasi dinamis jumlah pesan belum dibaca (`unread_count`).
+  - Endpoint `PATCH /api/v1/notifications/<id>/read` (Strict Gate JWT) untuk menandai notifikasi telah dibaca dengan penjagaan akses kepemilikan data (404 jika bukan milik pengguna aktif).
+  - Penambahan 6 skenario uji otomatis baru pada `tests/test_notifications_and_profile_api.py`, menghasilkan total 18 skenario uji Pytest lulus 100% (*18 passed in 22.54s*).
 - **Orkestrasi Kontainerisasi & Panduan Handover:**
   - Konfigurasi multi-layanan `docker-compose.yml` (`db` PostgreSQL 15 Alpine dengan *healthcheck* dan `backend` Flask Gunicorn pada jaringan `houseprice-net`).
   - Penyiapan direktori paket `app/services/` sebagai kerangka layer logika bisnis dan ML runtime.

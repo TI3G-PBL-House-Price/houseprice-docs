@@ -41,8 +41,8 @@ Sprint 1 difokuskan untuk menyelesaikan fondasi pada ketiga repositori serta men
 | [MOB] Slicing Notifikasi & Profil   | [ML]  Eksperimen Komparasi Model        | [DOC] Proposal Baseline |
 |       (@nurilhuda)                  |       (Random Forest vs XGBoost)        | [DOC] Revisi PRD & Specs|
 | [ML]  Export Model Final .pkl       | [QA]  Penyusunan Test Case Auth & BVA   | [DES] UI Design Mockup  |
-| [BE]  Web Admin CSV Dataset Manager | [BE]  User Profile & FCM Token API      | [MOB] Init Flutter Repo |
-| [BE]  In-App Notifications API      |                                         | [MOB] Slicing Beranda   |
+|                                     | [BE]  Web Admin CSV Dataset Manager     | [MOB] Init Flutter Repo |
+|                                     |                                         | [MOB] Slicing Beranda   |
 |                                     |                                         | [MOB] Slicing Form ML   |
 |                                     |                                         | [MOB] Slicing KPR Calc  |
 |                                     |                                         | [MOB] Splash Timer 3s   |
@@ -60,6 +60,8 @@ Sprint 1 difokuskan untuk menyelesaikan fondasi pada ketiga repositori serta men
 |                                     |                                         | [BE]  Admin Dark Console|
 |                                     |                                         | [BE]  API Locations&Mrkt|
 |                                     |                                         | [BE]  ML Service&Predict|
+|                                     |                                         | [BE]  Profile & FCM API |
+|                                     |                                         | [BE]  In-App Notif API  |
 |                                     |                                         | [QA]  API Pytest Suite  |
 |                                     |                                         | [DOC] Handover Tech Doc |
 +---------------------------------------------------------------------------------------------------------+
@@ -115,12 +117,12 @@ Sprint 1 difokuskan untuk menyelesaikan fondasi pada ketiga repositori serta men
   * **[TASK-BE-07] Web Admin Dark Engineering Console & Auth Sesi (Selesai - PR #1 Merged):** Implementasi antarmuka dashboard monokromatik gelap (`login.html` & `dashboard.html`), proteksi sesi `@admin_login_required`, 4 KPI cards, 2 visualisasi Chart.js, *Live Inference Workbench* (rekam ke `prediction_logs`), dan 4 tab data explorer.
   * **[TASK-BE-08] API Master Lokasi & Statistik Pasar (Selesai):** Implementasi endpoint publik `GET /api/v1/locations` (data 46 kecamatan dikelompokkan per 5 kota) dan `GET /api/v1/market-statistics` (rata-rata harga/m² dengan filter query `city` dan `district`) selaras OpenAPI 3.0.
   * **[TASK-BE-09] ML Service Layer & Predict API (Selesai - PR #3 Merged):** Abstraksi `app/services/ml_service.py` untuk pemuatan model `.pkl`, kalkulasi toleransi wajar $\pm 10\%$, dan endpoint `POST /api/v1/predict` serta `GET /api/v1/predict/history`.
-  * **[TASK-BE-10] User Profile & In-App Notifications API (Sedang Dikerjakan):** Rute `PUT /api/v1/auth/profile`, `POST /api/v1/auth/fcm-token`, `GET /api/v1/notifications`, dan `PATCH /api/v1/notifications/<id>/read`.
-  * **[TASK-BE-11] Web Admin CSV Dataset Management (To Do):** Modul unggah berkas CSV properti `jakarta_house_v1.csv` dan pratinjau tabel tabular.
+  * **[TASK-BE-10] User Profile & In-App Notifications API (Selesai):** Rute `PUT /api/v1/auth/profile`, `POST /api/v1/auth/fcm-token`, `POST /api/v1/auth/logout`, `GET /api/v1/notifications`, dan `PATCH /api/v1/notifications/<id>/read` lengkap dengan isolasi data antarakun dan perhitungan `unread_count`.
+  * **[TASK-BE-11] Web Admin CSV Dataset Management (Sedang Dikerjakan):** Modul unggah berkas CSV properti `jakarta_house_v1.csv`, kalkulasi metadata, dan pratinjau tabel tabular.
 
 #### D. Trek Penjaminan Mutu Perangkat Lunak (PMPL)
 * **Nurfinka Lailasari & Abdul Rahman Hanif Darmawan:**
-  * **[TASK-QA-01] Otomasi Pengujian Integrasi API (Selesai):** Penyiapan framework Pytest pada direktori `tests/` (`test_predict_api.py`, `test_market_api.py`, dan `test_auth_api.py`) dengan 12 test cases otomatis yang lulus 100%.
+  * **[TASK-QA-01] Otomasi Pengujian Integrasi API (Selesai):** Penyiapan framework Pytest pada direktori `tests/` (`test_notifications_and_profile_api.py`, `test_predict_api.py`, `test_market_api.py`, dan `test_auth_api.py`) dengan 18 test cases otomatis yang lulus 100%.
   * **[TASK-QA-02] Matriks Pelacakan Cacat (In Progress):** Setup *Defect Tracking Log* untuk mendokumentasikan kendala integrasi mobile-backend.
 * **Jasmine Nasywa Nabilah:**
   * Menyusun tabel skenario uji Blackbox (BVA dan EP) untuk formulir registrasi, formulir login, dan validasi form properti[cite: 7, 9].
