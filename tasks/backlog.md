@@ -44,10 +44,10 @@ Trek Eksperimen ML: `ml-model-testing` | Trek Backend Produksi: `houseprice-back
 | **ML-03** | `ml-model-testing` | Data Cleaning (Missing) | Penanganan nilai kosong (*missing values*) pada atribut `surface_area` dan `building_area`. | M | Sprint 1 | Nurfinka | **In Progress** |
 | **ML-04** | `ml-model-testing` | Preprocessing & Encoding | Pemfilteran *outlier* berbasis batas IQR, One-Hot Encoding fitur wilayah, penskalaan numerik, dan pemisahan train-test (80:20). | M | Sprint 1 | Naufal | **In Progress** |
 | **ML-05** | `ml-model-testing` | Benchmarking & Seleksi Model | Pengujian komparasi model regresi: Random Forest vs Baseline & Gradient Boosting, evaluasi metrik ($R^2 \ge 0,80$), dan ekspor biner `.pkl`. | M | Sprint 1 | Nuril | **In Progress** |
-| **ML-06** | `houseprice-backend-ml` | Setup Backend Skeleton & Auth | Inisialisasi struktur repositori Flask, Blueprints rute, skema auth JWT Bcrypt selaras OpenAPI 3.0, `Dockerfile`, dan multi-service `docker-compose.yml`. | M | Sprint 1 | Hanif & Nuril | **Done** |
-| **ML-07** | `houseprice-backend-ml` | REST API Inferensi | Implementasi endpoint `POST /api/v1/predict`, `GET /api/v1/market-statistics`, dan `GET /api/v1/locations` menggunakan model `.pkl` terpilih. | M | Sprint 2 | Hanif & Nuril | **To Do** |
-| **ML-08** | `houseprice-backend-ml` | Basis Data PostgreSQL | Migrasi DDL 9 tabel relasional, connection pool, skrip migrasi awal Alembic, dan seeding master data. | M | Sprint 1-2 | Hanif | **In Progress** |
-| **ML-09** | `houseprice-backend-ml` | Web Admin Dashboard | Antarmuka web pengelola: ringkasan metrik model aktif, monitoring volume data, manajemen unggah CSV, dan eksekusi retrain model. | S | Sprint 2 | Nuril & Hanif | **To Do** |
+| **ML-06** | `houseprice-backend-ml` | Setup Backend Skeleton & Auth | Inisialisasi struktur repositori Flask, Blueprints rute, skema auth JWT Bcrypt selaras OpenAPI 3.0, `Dockerfile`, dan multi-service `docker-compose.yml`. | M | Sprint 1 | Hanif | **Done** |
+| **ML-07** | `houseprice-backend-ml` | REST API Inferensi & Master Data | Implementasi endpoint `POST /api/v1/predict`, `GET /api/v1/market-statistics`, dan `GET /api/v1/locations` (master data & statistik selesai, inferensi predict menunggu model `.pkl`). | M | Sprint 2 | Hanif (API) & Nuril (Model `.pkl`) | **In Progress** |
+| **ML-08** | `houseprice-backend-ml` | Basis Data PostgreSQL | Migrasi DDL 9 tabel relasional, connection pool, skrip migrasi awal Alembic, dan seeding 9 tabel master & dummy data. | M | Sprint 1-2 | Hanif | **Done** |
+| **ML-09** | `houseprice-backend-ml` | Web Admin Dashboard | Antarmuka web pengelola: ringkasan metrik model aktif, monitoring volume data, live inference workbench, registri model, dan audit trail terotentikasi sesi. | S | Sprint 2 | Hanif | **Done (Core Dashboard & Auth)** |
 | **ML-10** | `houseprice-backend-ml` | Cloud Deployment | Penerapan backend dan PostgreSQL ke platform Coolify PaaS dengan sertifikat SSL HTTPS Let's Encrypt. | M | Sprint 2 | Hanif | **To Do** |
 
 ---
@@ -60,7 +60,7 @@ Keterlibatan lintas repositori
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **QA-01** | Uji Form Blackbox | Perancangan skenario uji dan eksekusi BVA (luas tanah min. 30 m²) serta EP pada form input properti mobile. | M | Sprint 1 | Jasmine | **To Do** |
 | **QA-02** | Uji Logika Bisnis | Verifikasi matematis kalkulasi bunga anuitas KPR, evaluasi rasio DSR OJK $\le 40\%$, dan formula deviasi kewajaran harga ($\pm 10\%$). | M | Sprint 2 | Naufal | **To Do** |
-| **QA-03** | Uji Integrasi & Latensi API | Pengujian otomatisasi endpoint inferensi backend via Postman Runner untuk memverifikasi latensi $< 1,5$ detik dan respon kode status HTTP. | M | Sprint 2 | Hanif | **To Do** |
+| **QA-03** | Uji Integrasi & Latensi API | Pengujian otomatisasi endpoint backend via Pytest test suite (`test_market_api.py`, `test_auth_api.py`) dengan 7 test cases 100% lulus, dan pengujian inferensi model latensi $< 1,5$ detik. | M | Sprint 2 | Hanif & Nurfinka | **In Progress** |
 | **QA-04** | Uji Pengalaman Pengguna | Pengujian Usability dan responsivitas layout visual pada perangkat fisik Android (bebas galat *overflow*). | M | Sprint 3 | Nuril | **To Do** |
 | **QA-05** | Defect Management & STR | Setup lembar pelacakan cacat (*Defect Tracking Log*) dan penyusunan laporan formal *Software Test Report* (STR). | M | Sprint 1-3 | Nurfinka | **In Progress** |
 

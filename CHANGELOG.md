@@ -10,10 +10,12 @@ Seluruh pembaruan penting pada proyek HousePrice dicatat dalam berkas ini. Forma
 - **Inisialisasi Arsitektur Flask Application Factory:**
   - Setup modularitas backend berbasis `create_app()` pada `app/__init__.py`.
   - Pemisahan inisialisasi ekstensi pada `app/extensions.py` (`SQLAlchemy`, `Bcrypt`, `Migrate`, `CORS`).
-  - Registrasi Blueprints: `/api/v1/auth`, `/api/v1/predict`, `/api/v1/notifications`, dan `/admin`.
+  - Registrasi Blueprints: `/api/v1/auth`, `/api/v1/predict`, `/api/v1/notifications`, `/api/v1` (market & locations), dan `/admin`.
 - **Implementasi Skema 9 Tabel Basis Data PostgreSQL & Migrasi Alembic:**
   - Pembuatan model data relasional lengkap pada `app/models/` (`admins`, `users`, `notifications`, `master_locations`, `dataset_metadata`, `ml_models`, `market_statistics`, `prediction_logs`, `system_audit_logs`) sesuai `docs/docs/data-model.md`.
   - Pembentukan berkas migrasi awal Alembic (`migrations/versions/e70def023971_create_initial_9_tables.py`) lengkap dengan tipe UUID native, *foreign keys*, *composite indexes*, *check constraints*, dan *partial index* `idx_ml_models_active`.
+- **Eksekusi Database Seeder Mandiri (`seed.py`):**
+  - Pengisian otomatis seluruh 9 tabel PostgreSQL: 1 akun super admin (`admin_hanif` / `Admin123!`), 3 pengguna mobile sampel, 46 master lokasi wilayah DKI Jakarta, 9 data agregasi statistik pasar, 1 metadata dataset primer (10.000 baris), 2 model ML (Random Forest v1.0.0 aktif $R^2=82.72\%$ & Linear v0.9.0 standby), telemetri prediksi, notifikasi, dan jejak audit.
 - **Implementasi Strict Gate Authentication & Penyelarasan Kontrak OpenAPI 3.0:**
   - Hashing kata sandi Bcrypt minimal 12 putaran (`rounds=12`).
   - Penerbitan dan validasi token JWT berbasis algoritma HS256 dengan masa aktif 7 hari.
@@ -21,6 +23,18 @@ Seluruh pembaruan penting pada proyek HousePrice dicatat dalam berkas ini. Forma
   - Endpoint `POST /api/v1/auth/register` dengan validasi kelengkapan nama, keabsahan email, kekuatan sandi (min 8 karakter), dan kecocokan `confirm_password`.
   - Endpoint `POST /api/v1/auth/login` dengan struktur payload bersarang (`data.access_token`, `data.token_type`, `data.expires_in`, dan `data.user` memuat `phone_number`).
   - Endpoint `GET /api/v1/auth/me` untuk pengembalian data profil pengguna aktif terotentikasi.
+- **Web Admin Dashboard & Manajemen Sesi (`/admin` - PR #1 Merged):**
+  - Antarmuka web administratif modern bertema *Dark Zinc Engineering Console* (`login.html` dan `dashboard.html`) dengan tipografi *JetBrains Mono* + *Plus Jakarta Sans*.
+  - Sistem autentikasi sesi admin terproteksi dekorator `@admin_login_required` pada rute `/admin/login` dan `/admin/dashboard`.
+  - Tombol cepat *Isi Otomatis Kredensial Demo* untuk efisiensi demonstrasi presentasi.
+  - Pemantauan 4 metrik KPI utama ($R^2$, MAE, Latensi $118$ ms, Volume Dataset), 2 grafik interaktif Chart.js, konsol simulasi *Live Inference Workbench* (rekam langsung ke `prediction_logs`), dan 4 tab penjelajah data (Telemetri Prediksi, Registri Model dengan aksi switch model, Statistik Pasar, dan Audit Trail).
+  - Pencatatan aktivitas login, logout, retrain trigger, dan switch model ke `system_audit_logs`.
+- **Implementasi Blueprint Master Data & Statistik Pasar API (`/api/v1`):**
+  - Endpoint publik `GET /api/v1/locations` yang menyajikan data 46 kecamatan dikelompokkan ke dalam 5 kota administratif DKI Jakarta untuk kebutuhan *cascading dropdown* mobile.
+  - Endpoint publik `GET /api/v1/market-statistics` yang mengembalikan agregasi harga pasar per $m^2$ dengan dukungan filter query parameter `?city=` dan `?district=`.
+- **Otomasi Pengujian Mutu (PMPL Pytest Test Suite):**
+  - Pembuatan direktori `tests/` memuat fixture `conftest.py`, `test_market_api.py`, dan `test_auth_api.py`.
+  - Seluruh 7 pengujian otomatis integrasi API (locations, market stats, register, login, me, invalid auth) berhasil lulus 100% (*7 passed in 2.65s*).
 - **Orkestrasi Kontainerisasi & Panduan Handover:**
   - Konfigurasi multi-layanan `docker-compose.yml` (`db` PostgreSQL 15 Alpine dengan *healthcheck* dan `backend` Flask Gunicorn pada jaringan `houseprice-net`).
   - Penyiapan direktori paket `app/services/` sebagai kerangka layer logika bisnis dan ML runtime.
@@ -57,29 +71,22 @@ Seluruh pembaruan penting pada proyek HousePrice dicatat dalam berkas ini. Forma
   - **Riwayat & Favorit:** Antarmuka daftar riwayat kalkulasi estimasi offline dan daftar properti tersimpan dengan kartu informasi interaktif.
   - **Pengaturan:** Halaman konfigurasi profil, preferensi notifikasi, mode gelap/terang, dan informasi pengembang PBL.
 
-### Sedang Dikerjakan (In Progress - Target Milestone 1 / Minggu 8)
-- **Machine Learning & Data Pipeline:**
-  - Analisis data eksploratif (EDA) dan visualisasi korelasi fitur pada dataset `jakarta_house.csv`.
-  - Pembersihan baris data ganda (penanganan 526 baris duplikat).
-  - Imputasi nilai kosong (*missing values*) pada kolom `surface_area` dan `building_area`.
-  - Penanganan nilai pencilan (*outliers*) menggunakan ambang batas Interquartile Range (IQR).
-  - Penskalaan fitur, One-Hot Encoding wilayah, dan pembagian dataset train-test (80:20).
-  - Pelatihan model regresi dasar dan algoritma ensemble (Random Forest Regressor) hingga ekspor file serialisasi `.pkl`.
+### Sedang Dikerjakan (In Progress - Target Menuju Milestone 2)
+- **Machine Learning & Model Integration:**
+  - Finalisasi artefak model serialisasi `.pkl` dari repositori `ml-model-testing` untuk disematkan ke `models_artefacts/model.pkl` (@nurilhuda).
+  - Pembentukan service layer `app/services/ml_service.py` untuk pemuatan model dan evaluasi batas toleransi wajar $\pm 10\%$.
+- **Backend & RESTful API (Flask):**
+  - Endpoint `POST /api/v1/predict` (Strict Gate inferensi + pencatatan telemetri user) dan `GET /api/v1/predict/history`.
+  - Endpoint pelengkap user profile (`PUT /api/v1/auth/profile`, `POST /api/v1/auth/fcm-token`, `POST /api/v1/auth/logout`).
+  - Endpoint in-app notifications (`GET /api/v1/notifications`, `PATCH /api/v1/notifications/<id>/read`).
+  - Web Admin CSV Dataset Management (Upload berkas & pratinjau tabel CSV).
 - **Aplikasi Mobile (Flutter):**
-  - Integrasi arsitektur State Management (Provider/BLoC) dan REST API client untuk menghubungkan form input ke backend ML di Sprint 2.
-- **Backend & RESTful API (Flask - Menuju Sprint 2):**
-  - Endpoint `POST /api/v1/predict` untuk inferensi estimasi harga rumah via model `.pkl`.
-  - Endpoint `GET /api/v1/market-statistics` dan `GET /api/v1/locations` untuk penyediaan data ke mobile.
-  - Skrip pengisian data awal (*seeding database*) untuk `master_locations` dan `admins`.
-- **Penjaminan Mutu Perangkat Lunak (PMPL):**
-  - Pembuatan test case Blackbox (Boundary Value Analysis & Equivalence Partitioning) untuk form properti.
-  - Skrip pengujian otomatis integrasi API dan uji latensi respons inferensi via Postman Runner.
+  - Integrasi arsitektur State Management (Provider/BLoC) dan REST API client untuk menghubungkan form input ke endpoint backend di Sprint 2.
 
 ### Direncanakan (Planned - Target Milestone 2 & Final Expo)
 - Integrasi server cloud berbasis Coolify dan konfigurasi SSL HTTPS Let's Encrypt.
 - Fitur Cek Kewajaran Harga dengan indikator persentase deviasi penawaran penjual.
 - Kalkulator simulasi pembiayaan KPR dengan metode bunga anuitas bulanan.
-- Penyimpanan riwayat prediksi lokal pengguna (SQLite / SharedPreferences).
 - Penyusunan Software Test Report (STR) komprehensif dan penutupan seluruh tiket cacat pada Defect Tracking Log.
 
 ---

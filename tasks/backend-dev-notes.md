@@ -33,66 +33,54 @@ Inisiasi repositori backend [`houseprice-backend-ml`](file:///c:/Users/HAMI/Down
 
 ---
 
-## 2. Rincian Handover Tugas Rekan Tim untuk Sprint 2 (Milestone 2)
+## 2. Rincian Penugasan & Integrasi Modul Sprint 2 (Milestone 2)
 
-### A. Muhammad Nuril Huda (@nurilhuda) — ML Runtime & Networking
-* **Integrasi Model Machine Learning (`app/services/ml_service.py`):**
-  - Setelah eksperimen komparasi model di `ml-model-testing` selesai dan artefak terbaik diekspor ke format `.pkl` (disimpan di `models_artefacts/model.pkl`):
-  - Buat class layanan di `app/services/ml_service.py` untuk memuat model menggunakan `joblib.load()`.
-  - Implementasikan transformasi fitur: *One-Hot Encoding* wilayah dan *StandardScaler* numerik sesuai pipeline latih.
-  - Tambahkan kalkulasi rentang deviasi wajar $\pm 10\%$:
+> [!NOTE]
+> Seluruh kerangka web backend, endpoint RESTful API (`auth`, `locations`, `market-statistics`, `predict`, `notifications`), integrasi PostgreSQL, Web Admin Dashboard, dan otomasi pengujian Pytest dikerjakan langsung secara terpusat oleh **Abdul Rahman Hanif Darmawan (@abdulrahmanhanif)**. Muhammad Nuril Huda difokuskan penuh pada penuntasan eksperimen ML dan pengeksporan model biner `.pkl`.
+
+### A. Muhammad Nuril Huda (@nurilhuda) — Model ML Artefak & Client Networking
+* **Penyediaan Artefak Model Machine Learning (`models_artefacts/model.pkl`):**
+  - Tuntaskan eksperimen komparasi model regresi pada repositori `ml-model-testing` (Random Forest, Linear Regression, Gradient Boosting/XGBoost).
+  - Ekspor model biner terbaik ($R^2 \ge 80\%$) ke format biner `model.pkl` lengkap dengan pipeline praproses fitur (One-Hot Encoding wilayah dan StandardScaler numerik).
+  - Letakkan berkas model pada direktori `models_artefacts/model.pkl` di repositori backend agar dapat dimuat oleh `app/services/ml_service.py`.
+* **Sinkronisasi Klien Mobile (Flutter):**
+  - Sesuaikan `AuthInterceptor` pada repositori `houseprice-mobile-app` agar menangkap token JWT dari struktur respons baru: `response.data['data']['access_token']`.
+  - Simpan token secara aman ke `flutter_secure_storage`.
+  - Integrasikan pemanggilan `POST /api/v1/predict` dan konsumsi riwayat kalkulasi pada aplikasi mobile.
+
+---
+
+### B. Abdul Rahman Hanif Darmawan (@abdulrahmanhanif) — Backend, Web Admin & Test Automation
+* **ML Service Layer & Predict API (`app/services/ml_service.py` & `app/blueprints/predict/`):**
+  - Mengimplementasikan loader model `joblib.load()` dengan penanganan graceful fallback praproses.
+  - Menghitung rentang deviasi toleransi wajar $\pm 10\%$:
     $$\text{Lower Bound} = \text{Predicted Price} \times 0.90$$
     $$\text{Upper Bound} = \text{Predicted Price} \times 1.10$$
-* **Endpoint Inferensi & Riwayat (`app/blueprints/predict/routes.py`):**
-  - **`POST /api/v1/predict` (Strict Gate):**
-    - Pasang dekorator `@token_required`.
-    - Validasi masukan: `surface_area >= 1`, `building_area >= 1`, `bed >= 0`, `bath >= 0`, `carport >= 0`.
-    - Eksekusi inferensi melalui `MLService`.
-    - Simpan riwayat ke tabel `prediction_logs` dengan mengikat `user_id = current_user.id`, `latency_ms`, dan `client_ip`.
-    - Pastikan total waktu eksekusi server $< 1.500$ ms.
-  - **`GET /api/v1/predict/history` (Strict Gate):**
-    - Pasang dekorator `@token_required`.
-    - Ambil data dari `prediction_logs` di mana `user_id == current_user.id` terurut `created_at DESC` dengan parameter paginasi `limit` (default 20) dan `offset` (default 0).
-* **Sinkronisasi Klien Mobile (Flutter):**
-  - Sesuaikan `AuthInterceptor` pada aplikasi Flutter agar menangkap token dari struktur baru `response.data['data']['access_token']`.
-  - Simpan token ke `flutter_secure_storage`.
+  - Menyediakan endpoint `POST /api/v1/predict` (Strict Gate, simpan ke `prediction_logs`, latensi server $< 1.500$ ms) dan `GET /api/v1/predict/history` (paginasi per pengguna).
+* **Master Lokasi & Statistik Pasar (`app/blueprints/market/` - Selesai):**
+  - Menyediakan `GET /api/v1/locations` (data 46 kecamatan dikelompokkan per 5 kota administratif DKI Jakarta).
+  - Menyediakan `GET /api/v1/market-statistics` (rata-rata harga/m² dengan filter query `city` dan `district`).
+* **Pusat Notifikasi & Profil (`app/blueprints/notifications/` & `app/blueprints/auth/`):**
+  - Endpoint `PUT /api/v1/auth/profile` dan `POST /api/v1/auth/fcm-token`.
+  - Endpoint `GET /api/v1/notifications` (`unread_count`) dan `PATCH /api/v1/notifications/<uuid:id>/read`.
+* **Web Admin Console (`/admin` - PR #1 Merged):**
+  - Dashboard monokromatik gelap, proteksi sesi admin, 4 KPI cards, 2 visualisasi Chart.js, konsol simulasi *Live Inference Workbench*, dan 4 tab data explorer.
+* **Otomasi Pengujian Integrasi API (Pytest Test Suite - Selesai):**
+  - Pembuatan automated test suite pada direktori `tests/` (`conftest.py`, `test_market_api.py`, `test_auth_api.py`) dengan 7 skenario uji 100% lulus.
 
 ---
 
-### B. Naufal Abid Aurizky (@naufalabid) — Master Data & Logika Bisnis
-* **Blueprint Master Wilayah & Statistik Pasar:**
-  - Buat blueprint baru (misal: `app/blueprints/market/routes.py`) dan daftarkan di `app/__init__.py`.
-  - **`GET /api/v1/locations`:**
-    - Ambil data dari tabel `master_locations` di mana `is_active = TRUE`.
-    - Format output JSON: Kelompokkan kota beserta daftar kecamatannya (`city`, array `districts`) untuk kebutuhan *cascading dropdown* di mobile.
-  - **`GET /api/v1/market-statistics`:**
-    - Ambil agregasi statistik harga rata-rata properti per wilayah dari tabel `market_statistics` dengan dukungan filter query parameter `city` dan `district`.
-* **Pusat Notifikasi (`app/blueprints/notifications/routes.py`):**
-  - **`GET /api/v1/notifications` (Strict Gate):**
-    - Pasang dekorator `@token_required`.
-    - Ambil daftar notifikasi milik `current_user.id` dari tabel `notifications`.
-    - Hitung jumlah pesan belum dibaca (`unread_count = count(is_read == FALSE)`).
-  - **`PATCH /api/v1/notifications/<uuid:id>/read` (Strict Gate):**
-    - Perbarui status `is_read = TRUE` hanya jika pesan tersebut berelasi dengan `current_user.id`.
-
----
-
-### C. Nurfinka Lailasari (@nurfinkalailasari) — QA Lead & API Test Automation
-* **Otomasi Pengujian Integrasi API (Postman / Pytest):**
-  - Buat koleksi uji otomatis untuk memvalidasi skenario positif dan negatif:
-    - Register: Validasi email ganda (409), password beda (400), format salah (400), sukses (201).
-    - Login: Kredensial salah (401), akun nonaktif (403), sukses (200).
-    - Predict: Akses tanpa token (401), token kedaluwarsa (401), luas tanah 0 (400), sukses (200).
-  - Verifikasi target NFR: Catat latensi endpoint inferensi `/predict` pada 50 kali eksekusi beruntun (target rata-rata $< 1,5$ detik).
-* **Pencatatan Defect Tracking:**
-  - Dokumentasikan setiap perbedaan respons atau kegagalan kontrak ke dalam lembar *Defect Tracking Log* untuk bahan penyusunan *Software Test Report* (STR).
-
----
-
-### D. Jasmine Nasywa Nabilah (@jasminenasywa) — Slicing & Mobile Data Binding
+### C. Naufal Abid Aurizky (@naufalabid) & Jasmine Nasywa Nabilah (@jasminenasywa) — Mobile UI & Data Binding
 * **Konsumsi API pada Form Properti & Beranda:**
-  - Integrasikan respons dari `GET /api/v1/locations` ke komponen dropdown kota dan kecamatan dinamis pada form properti mobile.
+  - Integrasikan respons dari `GET /api/v1/locations` ke komponen dropdown kota dan kecamatan dinamis pada form spesifikasi properti mobile.
   - Hubungkan kartu ringkasan tren pasar di Beranda Mobile dengan data dari `GET /api/v1/market-statistics`.
+  - Validasi alur Cek Kewajaran deviasi $\pm 10\%$ pada tampilan mobile.
+
+---
+
+### D. Nurfinka Lailasari (@nurfinkalailasari) — QA Lead & Defect Tracking
+* **Pencatatan Defect Tracking:**
+  - Dokumentasikan setiap perbedaan respons atau kegagalan kontrak integrasi backend-mobile ke dalam lembar *Defect Tracking Log* untuk bahan penyusunan *Software Test Report* (STR).
 
 ---
 
