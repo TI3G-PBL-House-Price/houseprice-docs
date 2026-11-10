@@ -58,6 +58,13 @@ Seluruh pembaruan penting pada proyek HousePrice dicatat dalam berkas ini. Forma
   - Penambahan *active database healthcheck heartbeat query* (`SELECT 1`) pada rute `/health` sesuai standar `docs/observability.md`.
   - Penyelarasan endpoint `/admin/retrain` agar mengembalikan kode status HTTP `202 Accepted` saat diakses via klien API selaras spesifikasi `openapi.yaml`.
   - Penambahan skenario uji `test_health_check_endpoint` pada `tests/test_auth_api.py`, menghasilkan total 23 pengujian Pytest lulus 100% (*23 passed in 19.21s*).
+- **Integrasi Model Machine Learning Produksi (XGBoost Regressor Tuned - v1.0.0):**
+  - Pengadopsian artefak model biner `models_artefacts/house_price_xgb_model.pkl` hasil optimasi `GridSearchCV` oleh tim ML (@nurilhuda).
+  - Capaian metrik evaluasi testing: $R^2 = 83.08\%$ (skor 0.8308), MAE = 0.2230, RMSE = 0.3350, sukses melampaui target PRD ($\ge 80\%$).
+  - Pembaruan layer inferensi `app/services/ml_service.py` untuk pemetaan fitur input model (`district`, `city`, `bed_rooms`, `bath_rooms`, `carport`, `land_area`, `building_area`) dan deteksi otomatis inversi logaritmik `np.expm1()`.
+  - Sinkronisasi dinamis basis data `seed.py`: ekstraksi otomatis 254 master wilayah, kalkulasi 259 agregasi statistik pasar, pemuatan metadata dataset riil 10.000 baris, mekanisme toleransi *auto-mapping* kolom (`surface_area` $\leftrightarrow$ `land_area`), dan pembersihan total data dummy.
+  - Penyelarasan Web Admin Dashboard: visualisasi metrik akurasi dinamis dari `hasil_xgb.pkl`, konsol Quick Predict terhubung langsung ke pipeline XGBoost, dropdown pencarian kecamatan dinamis, dan filter waktu WIB (UTC+7).
+  - Penambahan alur CI otomatis GitHub Actions pada `.github/workflows/backend-ci.yml` untuk validasi linter flake8, skema seeder basis data, dan eksekusi pengujian otomatis Pytest (23 passed 100%).
 - **Orkestrasi Kontainerisasi & Panduan Handover:**
   - Konfigurasi multi-layanan `docker-compose.yml` (`db` PostgreSQL 15 Alpine dengan *healthcheck* dan `backend` Flask Gunicorn pada jaringan `houseprice-net`).
   - Penyiapan direktori paket `app/services/` sebagai kerangka layer logika bisnis dan ML runtime.

@@ -6,12 +6,12 @@ Dokumen ini memuat fokus kerja, papan aktivitas kanban, target capaian, serta pe
 
 ## 1. Status & Realitas Repositori Terkini (Baseline Kondisi Riil)
 
-* **Repositori `ml-model-testing` (Fokus Utama ML Saat Ini):**
-  * Status: **Aktif (Fase Eksperimen)**[cite: 9].
-  * Progres: Pengujian eksplorasi algoritma sedang berjalan[cite: 9]. Model *Random Forest Regressor* telah diuji coba[cite: 9]. Algoritma pembanding lain (seperti *Multiple Linear Regression* sebagai baseline dan *Gradient Boosting / XGBoost*) sedang disiapkan untuk diuji pada dataset `jakarta_house.csv` sebelum menetapkan model final[cite: 9].
+* **Repositori `ml-model-testing` (Fokus Utama ML):**
+  * Status: **Selesai (Eksperimen & Optimasi Hyperparameter Tuntas)**.
+  * Capaian: Telah menuntaskan komparasi multi-algoritma dan optimasi hyperparameter menggunakan `GridSearchCV`. Model terpilih resmi: **XGBoost Regressor (Tuned)** dengan performa testing $R^2 = 83.08\%$ (MAE = 0.2230, RMSE = 0.3350), melampaui ambang batas PRD ($\ge 80\%$). Artefak biner `house_price_xgb_model.pkl` dan berkas evaluasi `hasil_xgb.pkl` telah berhasil diekspor.
 * **Repositori `houseprice-backend-ml`:**
-  * Status: **Aktif (Fondasi, Seeder, Web Admin Console, Auth JWT, Master Data API, & Pytest Selesai)**.
-  * Capaian: Arsitektur Flask Application Factory (`create_app`), skema 9 tabel relasional PostgreSQL lengkap dengan migrasi awal Alembic, eksekusi database seeder `seed.py` (admin, user sampel, 46 lokasi, 9 statistik pasar, 2 model ML, log telemetri, dan audit), Web Admin Dark Engineering Console terproteksi sesi (`@admin_login_required`) via PR #1, endpoint Auth Strict Gate (`/register`, `/login`, `/me`) selaras OpenAPI 3.0, endpoint Master Data (`GET /locations` dan `GET /market-statistics`), serta suite pengujian otomatis Pytest (`tests/`) dengan 7 test cases lulus 100%.
+  * Status: **Aktif (Model ML Produksi XGBoost Terintegrasi Penuh)**.
+  * Capaian: Arsitektur Flask Application Factory, skema 9 tabel PostgreSQL, integrasi model XGBoost v1.0.0 (`models_artefacts/house_price_xgb_model.pkl`), seeder dinamis `seed.py` (ekstraksi 254 wilayah & 259 statistik pasar dari 10.000 dataset riil dengan normalisasi kolom otomatis), Web Admin Console dinamis (waktu WIB, dropdown master, metrik riil), CI Pipeline GitHub Actions (`backend-ci.yml`), dan 23 test cases Pytest lulus 100%.
 * **Repositori `houseprice-mobile-app`:**
   * Status: **Selesai Slicing Fondasi & Re-Slicing Modul Baru**.
   * Progres: Slicing antarmuka awal (Beranda pasar, Form Spesifikasi Properti, Hasil Estimasi, dan Kalkulator KPR) telah selesai diimplementasikan[cite: 8, 9]. Namun, akibat penambahan requirement kritis dari dosen di pertengahan Sprint 1 (*Strict Gate Authentication*, Splash, Onboarding, Landing Page, Notifikasi, dan Profil), dibuka tugas *slicing* antarmuka lanjutan yang ditugaskan khusus kepada **@nurilhuda**[cite: 2, 8].
@@ -38,9 +38,12 @@ Sprint 1 difokuskan untuk menyelesaikan fondasi pada ketiga repositori serta men
 +---------------------------------------------------------------------------------------------------------+
 | BACKLOG / TO DO                     | IN PROGRESS                             | DONE                    |
 +---------------------------------------------------------------------------------------------------------+
-| [MOB] Slicing Notifikasi & Profil   | [ML]  Eksperimen Komparasi Model        | [DOC] Proposal Baseline |
-|       (@nurilhuda)                  |       (Random Forest vs XGBoost)        | [DOC] Revisi PRD & Specs|
-| [ML]  Export Model Final .pkl       | [QA]  Penyusunan Test Case Auth & BVA   | [DES] UI Design Mockup  |
+| [MOB] Slicing Notifikasi & Profil   | [QA]  Penyusunan Test Case Auth & BVA   | [DOC] Proposal Baseline |
+|       (@nurilhuda)                  | [OPS] Cloud Deployment Setup (Coolify)  | [DOC] Revisi PRD & Specs|
+|                                     |                                         | [DES] UI Design Mockup  |
+|                                     |                                         | [ML]  Eksperimen Model  |
+|                                     |                                         | [ML]  GridSearchCV Tuned|
+|                                     |                                         | [ML]  Export XGBoost.pkl|
 |                                     |                                         | [MOB] Init Flutter Repo |
 |                                     |                                         | [MOB] Slicing Beranda   |
 |                                     |                                         | [MOB] Slicing Form ML   |
@@ -63,6 +66,9 @@ Sprint 1 difokuskan untuk menyelesaikan fondasi pada ketiga repositori serta men
 |                                     |                                         | [BE]  Profile & FCM API |
 |                                     |                                         | [BE]  In-App Notif API  |
 |                                     |                                         | [BE]  Admin CSV Manager |
+|                                     |                                         | [BE]  XGBoost ML Pipeline|
+|                                     |                                         | [BE]  Dynamic DB Seeder |
+|                                     |                                         | [BE]  GitHub Actions CI |
 |                                     |                                         | [QA]  API Pytest Suite  |
 |                                     |                                         | [DOC] Handover Tech Doc |
 +---------------------------------------------------------------------------------------------------------+

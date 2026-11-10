@@ -39,10 +39,10 @@ Inisiasi repositori backend [`houseprice-backend-ml`](file:///c:/Users/HAMI/Down
 > Seluruh kerangka web backend, endpoint RESTful API (`auth`, `locations`, `market-statistics`, `predict`, `notifications`), integrasi PostgreSQL, Web Admin Dashboard, dan otomasi pengujian Pytest dikerjakan langsung secara terpusat oleh **Abdul Rahman Hanif Darmawan (@abdulrahmanhanif)**. Muhammad Nuril Huda difokuskan penuh pada penuntasan eksperimen ML dan pengeksporan model biner `.pkl`.
 
 ### A. Muhammad Nuril Huda (@nurilhuda) — Model ML Artefak & Client Networking
-* **Penyediaan Artefak Model Machine Learning (`models_artefacts/model.pkl`):**
-  - Tuntaskan eksperimen komparasi model regresi pada repositori `ml-model-testing` (Random Forest, Linear Regression, Gradient Boosting/XGBoost).
-  - Ekspor model biner terbaik ($R^2 \ge 80\%$) ke format biner `model.pkl` lengkap dengan pipeline praproses fitur (One-Hot Encoding wilayah dan StandardScaler numerik).
-  - Letakkan berkas model pada direktori `models_artefacts/model.pkl` di repositori backend agar dapat dimuat oleh `app/services/ml_service.py`.
+* **Penyediaan Artefak Model Machine Learning (`models_artefacts/house_price_xgb_model.pkl` - SELESAI):**
+  - Eksperimen multi-algoritma pada repositori `ml-model-testing` telah selesai dengan hasil optimasi `GridSearchCV`.
+  - Model terbaik terpilih: **XGBoost Regressor (Tuned)** dengan performa testing $R^2 = 83.08\%$ (skor 0.8308), MAE = 0.2230, RMSE = 0.3350, sukses melampaui target PRD ($\ge 80\%$).
+  - Artefak biner `models_artefacts/house_price_xgb_model.pkl` dan berkas evaluasi `models_artefacts/hasil_xgb.pkl` telah diserahkan dan diintegrasikan ke backend `app/services/ml_service.py`.
 * **Sinkronisasi Klien Mobile (Flutter):**
   - Sesuaikan `AuthInterceptor` pada repositori `houseprice-mobile-app` agar menangkap token JWT dari struktur respons baru: `response.data['data']['access_token']`.
   - Simpan token secara aman ke `flutter_secure_storage`.
