@@ -4,9 +4,31 @@ Seluruh pembaruan penting pada proyek HousePrice dicatat dalam berkas ini. Forma
 
 ---
 
+# Catatan Perubahan (Changelog) - HousePrice
+
+Seluruh pembaruan penting pada proyek HousePrice dicatat dalam berkas ini. Format pencatatan mengacu pada prinsip [Keep a Changelog](https://keepachangelog.com/id/1.0.0/) dan menganut penomoran versi [Semantic Versioning](https://semver.org/).
+
+---
+
 ## [Unreleased]
 
-### Ditambahkan (Added - Mobile App Sprint 1)
+### Ditambahkan (Added - Mobile App Sprint 1 — Lanjutan)
+
+- **[MOB-06] Cek Kewajaran Harga Properti (FR-MOB-04) — Naufal Abid Aurizky:**
+  - Implementasi `KewajaranCalculator` pada `lib/features/kpr/business_logic/kpr_calculator.dart`: logika evaluasi deviasi harga penawaran terhadap estimasi ML (±10%) dengan hasil klasifikasi *Murah / Wajar / Mahal*.
+  - Model `KewajaranResult` menyimpan: `hargaPenawaran`, `hargaEstimasi`, `deviasi`, `status`, `batasWajarBawah`, `batasWajarAtas`.
+  - Integrasi penuh ke `ResultPage` (`lib/features/prediction/presentation/pages/result_page.dart`): tombol *Evaluasi Kewajaran* kini terhubung ke `KewajaranCalculator.evaluasi()`, menampilkan badge status berwarna, persentase deviasi, saran tindakan, dan rentang kewajaran ±10%.
+  - Input harga penawaran menggunakan `ThousandsSeparatorInputFormatter` agar format angka ribuan konsisten.
+
+- **[MOB-07] Kalkulator Simulasi KPR (FR-MOB-05) — Naufal Abid Aurizky:**
+  - Implementasi `KprCalculator.hitung()` pada `lib/features/kpr/business_logic/kpr_calculator.dart` dengan rumus anuitas tetap: `M = [P × (r/12)] / [1 − (1 + r/12)^(−n×12)]`.
+  - Model `KprResult` menyimpan: `angsuranBulanan`, `angsuranTahunan`, `pokokPinjaman`, `totalBunga`, `totalPembayaran`, `uangMuka`, `dpPercentage`, `dsrPercentage`.
+  - `KprInputValidator` mencakup validasi BVA/EP: harga properti, uang muka, suku bunga (maks. 30%), tenor (maks. 35 tahun), pendapatan bersih, dan cicilan lain berjalan.
+  - DSR (Debt Service Ratio) memperhitungkan cicilan lain yang sudah berjalan; batas aman OJK ≤ 40%.
+  - `KprFormPage` diperbarui: form terhubung ke business logic nyata, validasi lengkap, field cicilan lain, toggle periode bulanan/tahunan, dan navigasi ke `KprResultPage` dengan data real.
+  - `KprResultPage` diperbarui: hero card angsuran dinamis, progress bar DSR berwarna, komposisi pokok-bunga, ringkasan input, disclaimer OJK — semua dari `KprResult` nyata (tidak lagi mock data).
+  - Utilitas `CurrencyFormatter` dan `ThousandsSeparatorInputFormatter` dipisahkan ke `lib/features/kpr/utils/currency_formatter.dart`.
+
 - **Struktur Fondasi Clean Architecture:**
   - Setup folder arsitektur `lib/core/` (constants: `app_colors.dart`, `app_sizes.dart`, `app_typography.dart`; theme: `app_theme.dart`) dan `lib/features/` berorientasi fitur presentation (`pages/` dan `widgets/`).
   - Implementasi scaffold navigasi `MainNavigationWrapper` menggunakan Material 3 `NavigationBar` (Beranda, Prediksi, Riwayat, Favorit, Pengaturan).

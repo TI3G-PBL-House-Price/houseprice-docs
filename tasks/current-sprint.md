@@ -45,7 +45,10 @@ Sprint 1 difokuskan untuk menyelesaikan fondasi pada ketiga repositori serta men
 | [MOB] Slicing Notifikasi & Profil   | [QA]  Penyusunan Test Case Auth & BVA   | [MOB] Slicing Beranda   |
 |       (@nurilhuda)                  | [BE]  Inisialisasi Blueprint Auth & DB  | [MOB] Slicing Form ML   |
 | [BE]  Setup Docker & DB Schema      |                                         | [MOB] Slicing KPR Calc  |
-| [ML]  Export Model Final .pkl       |                                         |                         |
+| [ML]  Export Model Final .pkl       |                                         | [MOB-06] Cek Kewajaran  |
+|                                     |                                         |       (Naufal) ✓        |
+|                                     |                                         | [MOB-07] KPR Calculator |
+|                                     |                                         |       (Naufal) ✓        |
 +---------------------------------------------------------------------------------------------------------+
 ```
 

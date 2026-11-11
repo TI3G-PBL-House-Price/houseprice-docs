@@ -25,8 +25,8 @@ Repositori: `houseprice-mobile-app` (Kondisi saat ini: Inisialisasi arsitektur C
 | **MOB-03** | Form Input (Fitur 2) | *Slicing* form 7 spesifikasi properti (luas tanah min. 30 m², bangunan, kamar, carport, dropdown wilayah) dan validasi masukan lokal. | M | Sprint 1 | Hanif | **Done** |
 | **MOB-04** | Core Networking (Fitur 2) | Integrasi REST API Client dan State Management (Provider/BLoC) untuk menghubungkan form mobile ke backend inferensi cloud. | M | Sprint 2 | Nuril | To Do |
 | **MOB-05** | Layar Hasil (Fitur 2 & 3) | Pembuatan kartu visual penampil nominal estimasi harga, rentang toleransi pasar wajar, ringkasan spesifikasi, dan tombol simpan riwayat. | M | Sprint 2 | Nurfinka | To Do |
-| **MOB-06** | Cek Kewajaran (Fitur 3) | Implementasi komponen input harga penawaran penjual di dalam Layar Hasil dan logika evaluasi status (*Murah, Wajar, Mahal* deviasi $\pm 10\%$). | M | Sprint 2 | Naufal | To Do |
-| **MOB-07** | Simulasi KPR (Fitur 4) | Pembuatan kalkulator cicilan KPR bunga anuitas bulanan, input pendapatan bersih bulanan, komposisi pokok vs bunga, dan rasio kelayakan DSR OJK $\le 40\%$. | M | Sprint 2 | Naufal | To Do |
+| **MOB-06** | Cek Kewajaran (Fitur 3) | Implementasi komponen input harga penawaran penjual di dalam Layar Hasil dan logika evaluasi status (*Murah, Wajar, Mahal* deviasi $\pm 10\%$). | M | Sprint 2 | Naufal | **Done** |
+| **MOB-07** | Simulasi KPR (Fitur 4) | Pembuatan kalkulator cicilan KPR bunga anuitas bulanan, input pendapatan bersih bulanan, komposisi pokok vs bunga, dan rasio kelayakan DSR OJK $\le 40\%$. | M | Sprint 2 | Naufal | **Done** |
 | **MOB-08** | Riwayat Lokal (Fitur 5) | Implementasi database lokal SQLite untuk menyimpan dan membaca riwayat kalkulasi estimasi & KPR secara *offline* melalui dialog/bottom sheet. | S | Sprint 2 | Nurfinka | To Do |
 | **MOB-09** | UI Polish & Error View | Penanganan indikator *loading shimmer*, dialog koneksi putus (*graceful degradation*), dan adaptabilitas layar Android. | S | Sprint 3 | Jasmine & Nuril | To Do |
 
@@ -58,7 +58,7 @@ Keterlibatan lintas repositori
 | Kode Task | Modul / Fitur | Deskripsi Pekerjaan | Prioritas | Target | Penanggung Jawab | Status Riil |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **QA-01** | Uji Form Blackbox | Perancangan skenario uji dan eksekusi BVA (luas tanah min. 30 m²) serta EP pada form input properti mobile. | M | Sprint 1 | Jasmine | **To Do** |
-| **QA-02** | Uji Logika Bisnis | Verifikasi matematis kalkulasi bunga anuitas KPR, evaluasi rasio DSR OJK $\le 40\%$, dan formula deviasi kewajaran harga ($\pm 10\%$). | M | Sprint 2 | Naufal | **To Do** |
+| **QA-02** | Uji Logika Bisnis | Verifikasi matematis kalkulasi bunga anuitas KPR, evaluasi rasio DSR OJK $\le 40\%$, dan formula deviasi kewajaran harga ($\pm 10\%$). | M | Sprint 2 | Naufal | **In Progress** |
 | **QA-03** | Uji Integrasi & Latensi API | Pengujian otomatisasi endpoint inferensi backend via Postman Runner untuk memverifikasi latensi $< 1,5$ detik dan respon kode status HTTP. | M | Sprint 2 | Hanif | **To Do** |
 | **QA-04** | Uji Pengalaman Pengguna | Pengujian Usability dan responsivitas layout visual pada perangkat fisik Android (bebas galat *overflow*). | M | Sprint 3 | Nuril | **To Do** |
 | **QA-05** | Defect Management & STR | Setup lembar pelacakan cacat (*Defect Tracking Log*) dan penyusunan laporan formal *Software Test Report* (STR). | M | Sprint 1-3 | Nurfinka | **In Progress** |
