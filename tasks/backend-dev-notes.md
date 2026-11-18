@@ -11,6 +11,61 @@
 
 ---
 
+## 0. Pembaruan Terbaru: Integrasi Model v2 + Dataset jakarta_house_v3 + NJOP (2026-11-19)
+
+> [!IMPORTANT]
+> Model ML telah diperbarui ke **v2.0.0** dengan dataset `jakarta_house_v3.csv` yang mengandung fitur NJOP.
+> Tim mobile **tidak perlu mengubah form input** — NJOP diperoleh otomatis oleh backend.
+
+### Apa yang Berubah?
+
+| Komponen | Sebelum (v1) | Sesudah (v2) |
+|---|---|---|
+| Dataset | `jakarta_house_v2.csv` | **`jakarta_house_v3.csv`** (9.533 baris + kolom `njop/m2`) |
+| Model `.pkl` | `house_price_xgb_model.pkl` v1.0.0 | **v2.0.0** (dilatih ulang dengan NJOP) |
+| Metrik Testing $R^2$ | 83.08% | **88.93%** (↑ 5.85pp) |
+| Jumlah Fitur Model | 7 fitur | **9 fitur** (tambah `njop/m2` & `total_njop_land`) |
+| Tabel DB | `master_locations` tanpa NJOP | **`master_locations` + kolom `njop_per_m2`** |
+| Input Pengguna | `city`, `district`, `surface_area`, `building_area`, `bed`, `bath`, `carport` | **Sama persis** (NJOP otomatis dari backend) |
+
+### Bagaimana Alur NJOP Bekerja?
+
+```
+Mobile App → POST /api/v1/predict
+  { city, district, surface_area, building_area, bed, bath, carport }
+              ↓
+Backend (ml_service.py)
+  1. Ambil njop_per_m2 dari master_locations WHERE city=... AND district=...
+  2. Hitung total_njop_land = land_area × njop_per_m2
+  3. Susun 9-fitur DataFrame untuk model
+  4. Jalankan model.predict() → pred_log → np.expm1(pred)
+              ↓
+Response: predicted_price (Rupiah)
+```
+
+### Setup Migrasi Setelah Pull
+
+Jika database sudah berjalan (kolom `njop_per_m2` belum ada), jalankan:
+```bash
+flask db upgrade
+```
+Ini akan menjalankan migrasi `a1b2c3d4e5f6` yang menambah kolom `njop_per_m2` ke `master_locations`.
+
+### Setup Seeder Setelah Pull
+
+```bash
+# Pastikan file dataset ada di uploads/datasets/jakarta_house_v3.csv
+python seed.py
+```
+
+Seeder akan:
+1. Membaca `uploads/datasets/jakarta_house_v3.csv`
+2. Mengisi `master_locations` dengan `njop_per_m2` per kecamatan
+3. Mengisi `market_statistics` dari agregasi dataset v3
+4. Mendaftarkan model v2.0.0 di tabel `ml_models`
+
+---
+
 ## 1. Ringkasan Status Backend Terkini (Baseline Milestone 1)
 
 Inisiasi repositori backend [`houseprice-backend-ml`](file:///c:/Users/HAMI/Downloads/PBL%20SMT%205/Repository/houseprice-backend-ml) telah berhasil diselesaikan dengan cakupan:

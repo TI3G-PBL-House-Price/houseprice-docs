@@ -6,6 +6,47 @@ Seluruh pembaruan penting pada proyek HousePrice dicatat dalam berkas ini. Forma
 
 ## [Unreleased]
 
+### Diperbarui (Updated - Model ML v2 + Dataset jakarta_house_v3 + NJOP Integration)
+
+> Dikerjakan pada branch `develop` — 2026-11-19
+
+#### Pembaruan Model Machine Learning ke v2.0.0 (XGBoost + GridSearchCV)
+- **Pembaruan artefak model** dari `house_price_xgb_model.pkl` v1.0.0 → **v2.0.0** yang dilatih pada dataset `jakarta_house_v3.csv` dengan tambahan fitur NJOP.
+- **Peningkatan metrik evaluasi** (Testing): $R^2 = 88.93\%$ (↑ dari $83.08\%$), MAE = 0.2466, RMSE = 0.3639, Adjusted $R^2 = 88.58\%$.
+- **Skema fitur model v2 (9 fitur total):**
+  - `district`, `city` → kategorikal (One-Hot Encoded oleh sklearn Pipeline)
+  - `bed_rooms`, `bath_rooms`, `carport`, `land_area`, `building_area` → numerik input pengguna
+  - `njop/m2` → **BARU**: median NJOP per m² per kecamatan, diperoleh otomatis dari database
+  - `total_njop_land` → **BARU**: `land_area × njop/m2`, dihitung di backend saat inferensi
+- **Dataset pelatihan diperbarui** dari `jakarta_house_v2.csv` → **`jakarta_house_v3.csv`** (9.533 baris, 10 kolom dengan kolom `njop/m2`).
+- **Pembaruan `models_artefacts/hasil_xgb.pkl`** memuat metrik evaluasi dan parameter hyperparameter terbaik (`GridSearchCV`).
+
+#### Pembaruan Layer Inferensi (`app/services/ml_service.py`)
+- **Penambahan method `get_njop_per_m2(city, district)`** yang mengambil median NJOP/m² secara otomatis dari tabel `master_locations` (kolom baru `njop_per_m2`) dengan fallback ke tabel hardcoded 42 kecamatan DKI Jakarta (sumber: `njop_jakarta_v2.csv`).
+- **Kalkulasi `total_njop_land`** (`land_area × njop/m2`) dilakukan di backend sebelum inferensi — pengguna tidak perlu menginput nilai NJOP.
+- **Pembaruan skema fitur inferensi** pada method `predict()` dari 7 fitur (v1) → 9 fitur (v2 dengan NJOP).
+- **Penyederhanaan fallback** — tidak lagi memiliki dua blok `try/except` bertumpuk; fallback langsung ke `calculate_price_heuristic()`.
+- **Penambahan tabel hardcoded `_NJOP_FALLBACK`** dan `_NJOP_CITY_FALLBACK` sebagai lapisan failsafe saat DB belum terseed.
+
+#### Pembaruan Model Database & Migrasi Alembic
+- **Kolom `njop_per_m2`** (Numeric 18,2, nullable) ditambahkan ke tabel `master_locations`.
+- **File migrasi Alembic baru**: `migrations/versions/a1b2c3d4e5f6_add_njop_per_m2_to_master_locations.py`.
+- **Model SQLAlchemy `MasterLocation`** diperbarui dengan kolom `njop_per_m2`.
+
+#### Pembaruan Layanan Dataset (`app/services/dataset_service.py`)
+- **Deteksi otomatis kolom `njop/m2`** pada CSV yang diunggah (kompatibel backward dengan dataset v1 dan v2 yang tidak memiliki kolom NJOP).
+- **Penyimpanan median NJOP/m² per kecamatan** ke kolom `master_locations.njop_per_m2` saat dataset diproses.
+
+#### Pembaruan Seeder Database (`seed.py`)
+- **Seed dataset `jakarta_house_v3.csv`** secara otomatis dari `uploads/datasets/jakarta_house_v3.csv` untuk mengisi `master_locations` (dengan `njop_per_m2`) dan `market_statistics`.
+- **Versi model diperbarui** ke `v2.0.0` di registri `ml_models` dengan metrik evaluasi terbaru.
+- **Fallback graceful**: jika file dataset tidak ditemukan, tabel lokasi dikosongkan dan admin diarahkan untuk unggah via Web Admin.
+
+#### Pembaruan API Master Lokasi (`app/blueprints/market/routes.py`)
+- **Response `GET /api/v1/locations`** kini menyertakan field `njop_per_m2` per kecamatan (map `district → njop_per_m2`) untuk transparansi data NJOP kepada klien.
+
+---
+
 ### Ditambahkan (Added - Backend Flask Sprint 1 / Milestone 1 Foundation)
 - **Inisialisasi Arsitektur Flask Application Factory:**
   - Setup modularitas backend berbasis `create_app()` pada `app/__init__.py`.

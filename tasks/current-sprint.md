@@ -7,11 +7,11 @@ Dokumen ini memuat fokus kerja, papan aktivitas kanban, target capaian, serta pe
 ## 1. Status & Realitas Repositori Terkini (Baseline Kondisi Riil)
 
 * **Repositori `ml-model-testing` (Fokus Utama ML):**
-  * Status: **Selesai (Eksperimen & Optimasi Hyperparameter Tuntas)**.
-  * Capaian: Telah menuntaskan komparasi multi-algoritma dan optimasi hyperparameter menggunakan `GridSearchCV`. Model terpilih resmi: **XGBoost Regressor (Tuned)** dengan performa testing $R^2 = 83.08\%$ (MAE = 0.2230, RMSE = 0.3350), melampaui ambang batas PRD ($\ge 80\%$). Artefak biner `house_price_xgb_model.pkl` dan berkas evaluasi `hasil_xgb.pkl` telah berhasil diekspor.
+  * Status: **Selesai (Eksperimen & Optimasi Hyperparameter Tuntas — Dataset v3 + NJOP)**.
+  * Capaian: Telah menuntaskan komparasi multi-algoritma dan optimasi hyperparameter menggunakan `GridSearchCV`. Model terpilih resmi: **XGBoost Regressor (Tuned) v2.0.0** dilatih pada `jakarta_house_v3.csv` (9.533 baris + fitur NJOP) dengan performa testing $R^2 = 88.93\%$ (MAE = 0.2466, RMSE = 0.3639, Adj. $R^2 = 88.58\%$), melampaui ambang batas PRD ($\ge 80\%$). Artefak biner `house_price_xgb_model.pkl` dan berkas evaluasi `hasil_xgb.pkl` telah diekspor dan diintegrasikan ke backend.
 * **Repositori `houseprice-backend-ml`:**
-  * Status: **Aktif (Model ML Produksi XGBoost Terintegrasi Penuh)**.
-  * Capaian: Arsitektur Flask Application Factory, skema 9 tabel PostgreSQL, integrasi model XGBoost v1.0.0 (`models_artefacts/house_price_xgb_model.pkl`), seeder dinamis `seed.py` (ekstraksi 254 wilayah & 259 statistik pasar dari 10.000 dataset riil dengan normalisasi kolom otomatis), Web Admin Console dinamis (waktu WIB, dropdown master, metrik riil), CI Pipeline GitHub Actions (`backend-ci.yml`), dan 23 test cases Pytest lulus 100%.
+  * Status: **Aktif (Model ML Produksi XGBoost v2.0.0 Terintegrasi Penuh dengan Fitur NJOP)**.
+  * Capaian: Arsitektur Flask Application Factory, skema 9 tabel PostgreSQL (+ kolom `njop_per_m2` pada `master_locations`), **integrasi model XGBoost v2.0.0** (`models_artefacts/house_price_xgb_model.pkl`), seeder dinamis `seed.py` (sinkronisasi `jakarta_house_v3.csv` dengan 42 kecamatan DKI Jakarta + nilai NJOP median per kecamatan), layer inferensi NJOP otomatis di `ml_service.py` (nilai `njop/m2` & `total_njop_land` dihitung backend tanpa input pengguna), migrasi Alembic baru `a1b2c3d4e5f6`, Web Admin Console dinamis, CI Pipeline GitHub Actions, dan 23 test cases Pytest lulus 100%.
 * **Repositori `houseprice-mobile-app`:**
   * Status: **Selesai Slicing Fondasi & Re-Slicing Modul Baru**.
   * Progres: Slicing antarmuka awal (Beranda pasar, Form Spesifikasi Properti, Hasil Estimasi, dan Kalkulator KPR) telah selesai diimplementasikan[cite: 8, 9]. Namun, akibat penambahan requirement kritis dari dosen di pertengahan Sprint 1 (*Strict Gate Authentication*, Splash, Onboarding, Landing Page, Notifikasi, dan Profil), dibuka tugas *slicing* antarmuka lanjutan yang ditugaskan khusus kepada **@nurilhuda**[cite: 2, 8].
@@ -44,6 +44,8 @@ Sprint 1 difokuskan untuk menyelesaikan fondasi pada ketiga repositori serta men
 |                                     |                                         | [ML]  Eksperimen Model  |
 |                                     |                                         | [ML]  GridSearchCV Tuned|
 |                                     |                                         | [ML]  Export XGBoost.pkl|
+|                                     |                                         | [ML]  Dataset v3 + NJOP |
+|                                     |                                         | [ML]  Model v2 R2=88.9% |
 |                                     |                                         | [MOB] Init Flutter Repo |
 |                                     |                                         | [MOB] Slicing Beranda   |
 |                                     |                                         | [MOB] Slicing Form ML   |
@@ -69,6 +71,9 @@ Sprint 1 difokuskan untuk menyelesaikan fondasi pada ketiga repositori serta men
 |                                     |                                         | [BE]  XGBoost ML Pipeline|
 |                                     |                                         | [BE]  Dynamic DB Seeder |
 |                                     |                                         | [BE]  GitHub Actions CI |
+|                                     |                                         | [BE]  Model v2 + NJOP   |
+|                                     |                                         | [BE]  Dataset v3 Seed   |
+|                                     |                                         | [BE]  Alembic NJOP Migr |
 |                                     |                                         | [QA]  API Pytest Suite  |
 |                                     |                                         | [DOC] Handover Tech Doc |
 +---------------------------------------------------------------------------------------------------------+
